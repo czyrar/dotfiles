@@ -1,0 +1,100 @@
+---
+- name: Arch Linux setup
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+    - name: Full system upgrade
+      become: true
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: Install packages
+      become: true
+      community.general.pacman:
+        name:
+          - git
+          - base-devel
+          - grep
+          - sed
+          - curl
+          - htop
+          - neovim
+          - firefox
+          - vlc
+          - gcc
+          - gcc-fortran
+          - ripgrep
+          - fzf
+          - zoxide
+          - zlib
+          - zlib-devel
+          - make
+          - openssl-devel
+          - luarocks
+          - fd-find
+          - nodejs
+          - tree-sitter
+          - blas-openblas
+          - zsh
+          - kitty
+          - hyprland
+          - xdg-desktop-portal-hyprland
+          - xdg-desktop-portal-gtk
+          - hyprpaper
+          - hypridle
+          - hyprlock
+          - hyprpolkitagent
+          - hyprland-qt-support
+          - hyprqt6engine
+          - hyprpicker
+          - networkmanager
+          - dunst
+          - pipewire
+          - wireplumber
+          - qt5-wayland
+          - qt6-wayland
+          - wofi
+          - waybar
+          - dconf
+          - dconf-editor
+          - nemo
+          - ly
+          - uwsm
+          - libnewt
+          - snap-pac
+          - grub-btrfs
+          - hyfetch
+          - fastfetch
+          - hyprshot
+        state: present
+
+    - name: Check if yay is installed
+      ansible.builtin.shell: "which yay"
+      register: yay_installed
+      ignore_errors: true
+      changed_when: false
+
+    - name: Download yay
+      when: yay_installed is failed
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/yay.git"
+        dest: "~{{ remote_regular_user }}/yay"
+
+    - name: Install yay
+      when: yay_installed is failed
+      ansible.builtin.shell: "makepkg -si"
+      args:
+        chdir: "~{{ remote_regular_user }}/yay"
+
+    - name: Install AUR packages
+      yay:
+        name:
+          - xwaylandvideobridge
+          - ani-cli
+          - snap-pac-grub

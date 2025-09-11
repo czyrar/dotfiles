@@ -1,0 +1,37 @@
+---
+- name: Arch Linux setup
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+    - name: Change shell to fish
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        shell: /usr/bin/fish
+
+    - name: Ensure fonts directory
+      ansible.builtin.file:
+        path: "~{{ remote_regular_user }}/.local/share/fonts"
+        state: directory
+        mode: "0755"
+        owner: "{{ remote_regular_user }}"
+
+    - name: Check if Maple Mono exists
+      ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.local/share/fonts/MapleMono-NF"
+      register: maple_mono_exists
+      ignore_errors: true
+      changed_when: false
+
+    - name: Download Maple Mono
+      when: maple_mono_exists is failed
+      ansible.builtin.unarchive:
+        src: "https://github.com/subframe7536/maple-font/releases/download/v7.6/MapleMono-NF-unhinted.zip"
+        dest: "~{{ remote_regular_user }}/.local/share/fonts/"
+        remote_src: true
+        mode: "0755"
+        owner: "{{ remote_regular_user }}"

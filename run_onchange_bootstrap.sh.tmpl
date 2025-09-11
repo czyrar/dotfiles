@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# .bootstrap/arch.yml hash: {{ include "dot_bootstrap/arch.yml" | sha256sum }}
+# .bootstrap/common.yml hash: {{ include "dot_bootstrap/common.yml" | sha256sum }}
+
+bootstrap_fedora() {
+  ansible-playbook ~/.bootstrap/fedora.yml --ask-become-pass
+}
+
+bootstrap_arch() {
+  ansible-playbook ~/.bootstrap/arch.yml --ask-become-pass
+}
+
+. /usr/lib/os-release
+if [ -z "$ID_LIKE" ]; then
+  DISTRO=$ID
+else
+  DISTRO=$ID_LIKE
+fi
+
+case "${DISTRO}" in
+  fedora)
+    bootstrap_fedora
+    ;;
+  arch)
+    bootstrap_arch
+    ;;
+  *)
+    echo "Unsupported linux distro: ${ID}"
+    exit 1
+    ;;
+esac
+
+ansible-playbook ~/.bootstrap/common.yml --ask-become-pass
