@@ -18,60 +18,126 @@
       become: true
       community.general.pacman:
         name:
-          - git
+          # Basic stuff
           - base-devel
           - grep
+          - wget
+          - vi
+          - vim
           - sed
           - curl
-          - htop
-          - neovim
-          - firefox
-          - vlc
-          - gcc
-          - gcc-fortran
-          - ripgrep
-          - fzf
-          - zoxide
+          - rsync
+          - bat
+          - eza
+          - openssl-devel
           - zlib
           - zlib-devel
-          - make
-          - openssl-devel
-          - luarocks
-          - fd-find
-          - nodejs
-          - tree-sitter
-          - blas-openblas
-          - zsh
+          - networkmanager
+          - pipewire
+          - pipewire-alsa
+          - pipewire-jack
+          - pipewire-pulse
+          - wireplumber
+          - ly
+          - uwsm
+          - app2unit
+          - snap-pac
+          - brightnessctl
+          - dash
+          - iwd
+          - wireguard-tools
+          - snapper
+          - man-db
+          - man-pages
+          # Graphical apps
+          - firefox
+          - vlc
           - kitty
+          - nemo
+          - evince
+          - gimp
+          - inkscape
+          - imagemagick
+          - keepassxc
+          - libreoffice-fresh
+          - obsidian
+          - spotify-launcher
+          - discord
+          - xournalpp
+          ## Hyprland
           - hyprland
           - xdg-desktop-portal-hyprland
           - xdg-desktop-portal-gtk
-          - hyprpaper
           - hypridle
           - hyprlock
+          - hyprpicker
+          - hyprshot
           - hyprpolkitagent
           - hyprland-qt-support
-          - hyprqt6engine
-          - hyprpicker
-          - networkmanager
-          - dunst
-          - pipewire
-          - wireplumber
           - qt5-wayland
           - qt6-wayland
-          - wofi
+          - dunst
+          ## Waybar
           - waybar
-          - dconf
-          - dconf-editor
-          - nemo
-          - ly
-          - uwsm
-          - libnewt
-          - snap-pac
-          - grub-btrfs
+          - bluetui
+          - btop
+          - impala
+          - papirus-icon-theme
+          - power-profiles-daemon
+          - rclone
+          - wlogout
+          ## Extra
+          - fuzzel
+          - swww
           - hyfetch
           - fastfetch
-          - hyprshot
+          - gpu-screen-recorder
+          - pandoc-cli
+          - speedtest-cli
+          # Neovim
+          - neovim
+          - npm
+          - tree-sitter-cli
+          - ripgrep
+          - fd
+          - fzf
+          - luarocks
+          - ruby
+          # Compilers
+          - gcc
+          - gcc-fortran
+          - rustup
+          - blas-openblas
+          - make
+          - docker
+          - docker-compose
+          ## Latex
+          - texlive-basic
+          - texlive-basic
+          - texlive-bibtexextra
+          - texlive-binextra
+          - texlive-context
+          - texlive-fontsextra
+          - texlive-fontsrecommended
+          - texlive-fontutils
+          - texlive-formatsextra
+          - texlive-games
+          - texlive-humanities
+          - texlive-latex
+          - texlive-latexextra
+          - texlive-latexrecommended
+          - texlive-luatex
+          - texlive-mathscience
+          - texlive-metapost
+          - texlive-music
+          - texlive-pictures
+          - texlive-plaingeneric
+          - texlive-pstricks
+          - texlive-publishers
+          - texlive-xetex
+          # ZSH
+          - zsh
+          - zoxide
         state: present
 
     - name: Check if yay is installed
@@ -97,4 +163,45 @@
         name:
           - xwaylandvideobridge
           - ani-cli
-          - snap-pac-grub
+          - mangal-bin
+          - juliaup
+          - limine-snapper-sync
+          - limine-mkinitcpio-hook
+          - libadwaita-without-adwaita
+          - soulseekqt
+
+    - name: Change shell to zsh
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        shell: /usr/bin/zsh
+
+    - name: Ensure fonts directory
+      ansible.builtin.file:
+        path: "~{{ remote_regular_user }}/.local/share/fonts"
+        state: directory
+        mode: "0755"
+        owner: "{{ remote_regular_user }}"
+
+    - name: Check if Maple Mono exists
+      ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.local/share/fonts/MapleMono-NF-CN"
+      register: maple_mono_exists
+      ignore_errors: true
+      changed_when: false
+
+    - name: Download Maple Mono
+      when: maple_mono_exists is failed
+      ansible.builtin.git:
+        repo: "https://github.com/czyrar/maple_mono.git"
+        dest: "~{{ remote_regular_user }}/.local/share/fonts/MapleMono-NF-CN"
+
+    - name: Check if there is neovim config
+      ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.config/nvim"
+      register: nvim_exists
+      ignore_errors: true
+      changed_when: false
+
+    - name: Install neovim configuration
+      when: nvim_exists is failed
+      ansible.builtin.git:
+        repo: "https://github.com/czyrar/nvim.git"
+        dest: "~{{ remote_regular_user }}/.config/nvim"

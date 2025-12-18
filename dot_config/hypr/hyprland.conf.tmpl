@@ -1,36 +1,30 @@
-# ========
-#   Hyprland config file for my "diinki aero" rice. Hyprland is the right tool for the job due to all of its available
-#   window effects, but you could achieve 99% of the same design with swayfx as well; I just chose hyprland due to
-#   compatability issues with nvidia GPU.
-# ========
-
 #                                    !!MONITORS!!                                   #
 # --------------------------------------------------------------------------------- #
 #                                    !!MONITORS!!                                   #
 
 # run `hyprctl monitors all` to see all your monitors!!!
-{{- if eq .chezmoi.hostname "hermes" }}
+{{ if eq .chezmoi.hostname "hermes" }}
 monitor=eDP-1, 1920x1200@60.00, 0x0, 1
-{{- end }}
+{{ else }}
+monitor = , preferred, auto, 1
+{{ end }}
 
-# Startup programs
-exec-once = systemctl --user enable --now pipewire wireplumber
+# Startup programs. Set as systemctl for UWSM
+exec-once = systemctl --user enable --now pipewire wireplumber pipewire-pulse
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = systemctl --user enable --now hyprpolkitagent.service
+exec-once = systemctl --user enable --now hypridle.service
 exec-once = systemctl --user enable --now waybar.service
-exec-once = uwsm app -- nm-applet
-exec-once = uwsm app -- dunst
+exec-once = hyprctl setcursor adwaita 24
+exec-once = app2unit dunst
+exec-once = app2unit swww-daemon
 
 # Default programs
-$terminal = kitty
-#$fileManager = GTK_THEME=diinki-retro-dark nautilus
-$fileManager = nautilus
-$menu = pgrep wofi > /dev/null 2>&1 && killall wofi || wofi --show drun
-
-# Environment variables
-env = XCURSOR_SIZE,24
-env = HYPRCURSOR_SIZE,24
+$terminal = app2unit kitty
+$fileManager = app2unit nemo
+$menu = pgrep fuzzel > /dev/null 2>&1 && killall fuzzel || fuzzel --launch-prefix='app2unit --fuzzel-compat --'
+$screenshot = app2unit hyprshot --mode region --output-folder /tmp
 
 #                                    !!INPUT!!                                      #
 # --------------------------------------------------------------------------------- #
@@ -41,20 +35,18 @@ input {
     # Switch layout with pressing: alt + shift
     kb_layout = us,es
     kb_options = grp:alt_shift_toggle
-
-    # Set as needed
-    kb_rules = 
     kb_variant = altgr-intl,winkeys
-    kb_model =
-
     follow_mouse = 1
 
     # Range is -1.0 to 1.0 | 0 means no modification to sensitivity.
-    sensitivity = 0 
-
+    sensitivity = 0
     touchpad {
-        natural_scroll = false
+        natural_scroll = true
     }
+
+    # Faster scroll
+    repeat_rate = 35
+    repeat_delay = 200
 }
 
 # This fixes a few bugs.
@@ -70,45 +62,35 @@ animations {
     enabled = false
 }
 
-# The gaps between windows, as well as border colors.
-# proportional to the taskbar values.
 general {
     # Inner and Outer gaps between windows.
-    gaps_in = 5
-    gaps_out = 10
-
-    # I prefer a thin border
+    gaps_in = 2.5
+    gaps_out = 5
     border_size = 1
-
-    # Border colors.
-    col.active_border = rgb(d8cab8)
-    col.inactive_border = rgb(AC82E9)
+    col.active_border = rgb(0db9d7)
+    col.inactive_border = rgb(7aa2f7)
 
     # Set to true enable resizing windows by clicking and dragging on borders and gaps
     resize_on_border = true
-
-    layout = dwindle
+    layout = master
 
     # READ https://wiki.hyprland.org/Configuring/Tearing/ BEFORE TURNING ON!
     allow_tearing = false
 }
 
-# Window Decorations! Shadow, Blur, etc.
 decoration {
     # 8px same as taskbar, change if wanted.
-    rounding = 0
+    rounding = 8
 
     # I want transparancy to not change, since we have the colored border.
     active_opacity = 1.0
     inactive_opacity = 1
 
     # Window Shadow
-    shadow:enabled = true
-    shadow:range = 16
+    shadow:enabled = false
+    shadow:range = 8
     shadow:render_power = 5
-    shadow:color = rgba(0,0,0,0.2)
-
-    # Transparent Window Blur
+    shadow:color = rgb(444b6a)
     blur:enabled = false
 }
 
@@ -123,16 +105,10 @@ master {
     new_status = master
 }
 
-# We have our own wallpapers :) So I'll disable default things.
+# We have our own wallpapers
 misc {
     force_default_wallpaper = 0
     disable_hyprland_logo = true
-}
-
-# No need for gestures unless you have a touch display.
-gestures {
-    workspace_swipe = true
-    workspace_swipe_fingers = 3
 }
 
 #                                    !!KEYBINDS!!                                   #
@@ -142,20 +118,26 @@ gestures {
 # Windows key / Super key is the main modifier key. (abbreviated as mod)
 $mainMod = SUPER
 
-# mod + enter = start terminal
-bind = $mainMod, Return, exec, uwsm app -- $terminal
-# mod + Q = kill current focused application
+bind = $mainMod, Return, exec, $terminal
 bind = $mainMod, Q, killactive,
-# mod + shift + S = take screenshot of area, MUST HAVE HYPRSHOT INSTALLED!
-bind = $mainMod SHIFT, S, exec, hyprshot --mode region --output-folder /tmp
-# mod + E = open file manager
-bind = $mainMod, E, exec, uwsm app -- $fileManager
-# mod + shift + space = Toggle focused window to be floating or tiled.
+bind = $mainMod SHIFT, S, exec, $screenshot
+bind = $mainMod, E, exec, $fileManager
 bind = $mainMod SHIFT, SPACE, togglefloating
-# mod + F = toggle focused window to full-screen view.
 bind = $mainMod, F, fullscreen
-# mod + D = toggle application launcher.
-bind = $mainMod, D, exec, uwsm app -- $menu
+bind = $mainMod, D, exec, $menu
+bind = $mainMod, M, exec, uwsm stop
+
+# Moving focus
+bind = $mainMod, J, movefocus, d
+bind = $mainMod, L, movefocus, r
+bind = $mainMod, K, movefocus, u
+bind = $mainMod, H, movefocus, l
+
+# Moving windows
+binde = $mainMod SHIFT, J, resizeactive, 0 -50
+binde = $mainMod SHIFT, L, resizeactive, 50 0
+binde = $mainMod SHIFT, K, resizeactive, 0 50
+binde = $mainMod SHIFT, H, resizeactive, -50 0
 
 # Switch current workspaces with mainMod + [0-9]
 bind = $mainMod, 1, workspace, 1
@@ -167,7 +149,6 @@ bind = $mainMod, 6, workspace, 6
 bind = $mainMod, 7, workspace, 7
 bind = $mainMod, 8, workspace, 8
 bind = $mainMod, 9, workspace, 9
-bind = $mainMod, 0, workspace, 10
 
 # Move a focused window to a workspace with mainMod + SHIFT + [0-9]
 bind = $mainMod SHIFT, 1, movetoworkspace, 1
@@ -179,47 +160,64 @@ bind = $mainMod SHIFT, 6, movetoworkspace, 6
 bind = $mainMod SHIFT, 7, movetoworkspace, 7
 bind = $mainMod SHIFT, 8, movetoworkspace, 8
 bind = $mainMod SHIFT, 9, movetoworkspace, 9
-bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
 # Move and Resize windows with mainMod + LMB/RMB and dragging, drag on edges to resize.
 bindm = $mainMod, mouse:272, movewindow
 bindm = $mainMod, mouse:273, resizewindow
 
+{{ if eq .chezmoi.hostname "hermes" }}
 # Laptop multimedia keys for volume and LCD brightness
-bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1
+bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_SINK@ 5%-
+bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_SINK@ toggle
+bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_SOURCE@ toggle
 bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
 bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
+{{ end }}
 
 #                                    !!WINDOW RULES!!                               #
 # --------------------------------------------------------------------------------- #
 #                                    !!WINDOW RULES!!                               #
 
+# Open TUIs in Waybar
+windowrule = tag +tui-window, class:(waybar-floating)
+windowrule = float, tag:tui-window
+windowrule = size 1600 1000, tag:tui-window
+
+# KeePass in the upper right corner
+windowrule = float, class:^(org.keepassxc.KeePassXC)$
+windowrule = size 800 700, class:^(org.keepassxc.KeePassXC)$
+windowrule = move 1108 51, class:^(org.keepassxc.KeePassXC)$
+
+# Config UIs
+windowrule = float, class:^(xdg-desktop-portal-gtk|xdg-desktop-portal-hyprland|Display)$
+
+# Fix VMD
+windowrule = float, class:(FLTK|Toplevel)
+
 # Fix Unity
-windowrulev2 = minsize 250 250, class:^(Unity)$, title:^(Project Settings)$
-windowrulev2 = minsize 250 250, class:^(Unity)$, title:^(Preferences)$
-windowrulev2 = minsize 250 250, class:^(Unity)$, title:^(UnityEditor.AddComponent.AddComponentWindow)$
-windowrulev2 = minsize 250 250, class:^(Unity)$, title:^(Package Manager)$
-windowrulev2 = minsize 250 250, class:^(Unity)$, title:^(UI Toolkit Debugger)$
-windowrulev2 = minsize 250 500, class:^(Unity)$, title:^(Font Asset Creator)$
-windowrulev2 = minsize 500 250, class:^(Unity)$, title:^(Background Tasks)$
-windowrulev2 = minsize 150 300, initialTitle:(UnityEditor.PopupWindow)
-windowrulev2 = minsize 230 200, initialTitle:(UnityEditor.AddComponent.AddComponentWindow)
-windowrulev2 = minsize 500 500, initialTitle:(UnityEngine.InputSystem.Editor.AdvancedDropdownWindow)
-windowrulev2 = minsize 230 500, initialTitle:(UnityEditor.AnnotationWindow)
-windowrulev2 = minsize 300 200, initialTitle:(UnityEditor.IMGUI.Controls.AdvancedDropdownWindow)
-windowrulev2 = move cursor, class:^(Unity)$, title:^(UnityEditor.AddComponent.AddComponentWindow)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(UnityEditor.IMGUI.Controls.AdvancedDropdownWindow)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(UnityEngine.InputSystem.Editor.AdvancedDropdownWindow)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(UnityEditor.PopupWindow)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(Preferences)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(Color)$
-windowrulev2 = move cursor, class:^(Unity)$, title:^(HDR Color)$
+windowrule = minsize 250 250, class:^(Unity)$, title:^(Project Settings)$
+windowrule = minsize 250 250, class:^(Unity)$, title:^(Preferences)$
+windowrule = minsize 250 250, class:^(Unity)$, title:^(UnityEditor.AddComponent.AddComponentWindow)$
+windowrule = minsize 250 250, class:^(Unity)$, title:^(Package Manager)$
+windowrule = minsize 250 250, class:^(Unity)$, title:^(UI Toolkit Debugger)$
+windowrule = minsize 250 500, class:^(Unity)$, title:^(Font Asset Creator)$
+windowrule = minsize 500 250, class:^(Unity)$, title:^(Background Tasks)$
+windowrule = minsize 150 300, initialTitle:(UnityEditor.PopupWindow)
+windowrule = minsize 230 200, initialTitle:(UnityEditor.AddComponent.AddComponentWindow)
+windowrule = minsize 500 500, initialTitle:(UnityEngine.InputSystem.Editor.AdvancedDropdownWindow)
+windowrule = minsize 230 500, initialTitle:(UnityEditor.AnnotationWindow)
+windowrule = minsize 300 200, initialTitle:(UnityEditor.IMGUI.Controls.AdvancedDropdownWindow)
+windowrule = move cursor, class:^(Unity)$, title:^(UnityEditor.AddComponent.AddComponentWindow)$
+windowrule = move cursor, class:^(Unity)$, title:^(UnityEditor.IMGUI.Controls.AdvancedDropdownWindow)$
+windowrule = move cursor, class:^(Unity)$, title:^(UnityEngine.InputSystem.Editor.AdvancedDropdownWindow)$
+windowrule = move cursor, class:^(Unity)$, title:^(UnityEditor.PopupWindow)$
+windowrule = move cursor, class:^(Unity)$, title:^(Preferences)$
+windowrule = move cursor, class:^(Unity)$, title:^(Color)$
+windowrule = move cursor, class:^(Unity)$, title:^(HDR Color)$
 
 # Dragging XWayland
-windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
 
 # Screenshare XWayland
 windowrule = opacity 0.0 override, class:^(xwaylandvideobridge)$
