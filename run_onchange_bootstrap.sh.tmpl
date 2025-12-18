@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # .bootstrap/arch.yml hash: {{ include "dot_bootstrap/arch.yml" | sha256sum }}
-# .bootstrap/common.yml hash: {{ include "dot_bootstrap/common.yml" | sha256sum }}
 
 bootstrap_fedora() {
   ansible-playbook ~/.bootstrap/fedora.yml --ask-become-pass
