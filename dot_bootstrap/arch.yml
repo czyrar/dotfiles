@@ -50,7 +50,6 @@
           - man-db
           - man-pages
           # Graphical apps
-          - firefox
           - vlc
           - kitty
           - nemo
@@ -174,6 +173,7 @@
           - limine-mkinitcpio-hook
           - libadwaita-without-adwaita
           - soulseekqt
+          - librewolf-bin
         state: present
 
     - name: Change shell to zsh
