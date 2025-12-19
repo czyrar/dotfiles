@@ -64,6 +64,10 @@
           - spotify-launcher
           - discord
           - xournalpp
+          - qbittorrent
+          - krita
+          - mpv
+          - eog
           ## Hyprland
           - hyprland
           - xdg-desktop-portal-hyprland
