@@ -168,9 +168,9 @@
             "bluetooth",
             "custom/split",
             "backlight",
-{{ if eq .chezmoi.hostname "hermes" }}
             "custom/split",
             "power-profiles-daemon",
+{{ if ne .chezmoi.hostname "asgore" }}
             "battery",
 {{ end }}
             "custom/closebracket",
