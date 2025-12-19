@@ -2,20 +2,22 @@
 - name: Arch Linux setup
   hosts: localhost
   connection: local
+  remote_user: czyrar
+  become: false
+  vars:
+    user: czyrar
 
   tasks:
-    - name: Get my user
-      ansible.builtin.set_fact:
-        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
-
     - name: Full system upgrade
       become: true
+      remote_user: root
       community.general.pacman:
         update_cache: true
         upgrade: true
 
     - name: Install packages
       become: true
+      remote_user: root
       community.general.pacman:
         name:
           # Basic stuff
@@ -29,10 +31,8 @@
           - rsync
           - bat
           - eza
-          - openssl-devel
+          - openssl
           - zlib
-          - zlib-devel
-          - networkmanager
           - pipewire
           - pipewire-alsa
           - pipewire-jack
@@ -150,16 +150,17 @@
       when: yay_installed is failed
       ansible.builtin.git:
         repo: "https://aur.archlinux.org/yay.git"
-        dest: "~{{ remote_regular_user }}/yay"
+        dest: "~{{ user }}/yay"
 
     - name: Install yay
       when: yay_installed is failed
       ansible.builtin.shell: "makepkg -si"
       args:
-        chdir: "~{{ remote_regular_user }}/yay"
+        chdir: "~{{ user }}/yay"
 
     - name: Install AUR packages
-      yay:
+      kewlfft.aur.aur:
+        use: yay
         name:
           - xwaylandvideobridge
           - ani-cli
@@ -169,21 +170,22 @@
           - limine-mkinitcpio-hook
           - libadwaita-without-adwaita
           - soulseekqt
+        state: present
 
     - name: Change shell to zsh
       ansible.builtin.user:
-        name: "{{ remote_regular_user }}"
+        name: "{{ user }}"
         shell: /usr/bin/zsh
 
     - name: Ensure fonts directory
       ansible.builtin.file:
-        path: "~{{ remote_regular_user }}/.local/share/fonts"
+        path: "~{{ user }}/.local/share/fonts"
         state: directory
         mode: "0755"
-        owner: "{{ remote_regular_user }}"
+        owner: "{{ user }}"
 
     - name: Check if Maple Mono exists
-      ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.local/share/fonts/MapleMono-NF-CN"
+      ansible.builtin.shell: "ls ~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
       register: maple_mono_exists
       ignore_errors: true
       changed_when: false
@@ -192,10 +194,10 @@
       when: maple_mono_exists is failed
       ansible.builtin.git:
         repo: "https://github.com/czyrar/maple_mono.git"
-        dest: "~{{ remote_regular_user }}/.local/share/fonts/MapleMono-NF-CN"
+        dest: "~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
 
     - name: Check if there is neovim config
-      ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.config/nvim"
+      ansible.builtin.shell: "ls ~{{ user }}/.config/nvim"
       register: nvim_exists
       ignore_errors: true
       changed_when: false
@@ -204,4 +206,4 @@
       when: nvim_exists is failed
       ansible.builtin.git:
         repo: "https://github.com/czyrar/nvim.git"
-        dest: "~{{ remote_regular_user }}/.config/nvim"
+        dest: "~{{ user }}/.config/nvim"
