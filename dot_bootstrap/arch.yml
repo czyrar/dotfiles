@@ -3,20 +3,20 @@
   hosts: localhost
   connection: local
   remote_user: czyrar
-  become: false
+  become: no
   vars:
     user: czyrar
 
   tasks:
-    - name: Full system upgrade
-      become: true
+    - name: Full system upgrade (pacman)
+      become: yes
       remote_user: root
       community.general.pacman:
-        update_cache: true
-        upgrade: true
+        update_cache: yes
+        upgrade: yes
 
     - name: Install packages
-      become: true
+      become: yes
       remote_user: root
       community.general.pacman:
         name:
@@ -67,6 +67,7 @@
           - krita
           - mpv
           - eog
+          - calibre
           ## Hyprland
           - hyprland
           - xdg-desktop-portal-hyprland
@@ -87,7 +88,6 @@
           - impala
           - papirus-icon-theme
           - power-profiles-daemon
-          - rclone
           - wlogout
           ## Extra
           - fuzzel
@@ -97,6 +97,7 @@
           - gpu-screen-recorder
           - pandoc-cli
           - speedtest-cli
+          - rclone
           # Neovim
           - neovim
           - npm
@@ -146,8 +147,8 @@
     - name: Check if yay is installed
       ansible.builtin.shell: "which yay"
       register: yay_installed
-      ignore_errors: true
-      changed_when: false
+      ignore_errors: yes
+      changed_when: no
 
     - name: Download yay
       when: yay_installed is failed
@@ -160,6 +161,23 @@
       ansible.builtin.shell: "makepkg -si"
       args:
         chdir: "~{{ user }}/yay"
+
+    - name: Make `czyrar` be able to use sudo without password
+      become: yes
+      remote_user: root
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        regexp: 'NOPASSWD: ALL$'
+        line: '%wheel ALL=(ALL:ALL) NOPASSWD: ALL'
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Full system upgrade (AUR)
+      kewlfft.aur.aur:
+        use: yay
+        upgrade: yes
+        update_cache: yes
 
     - name: Install AUR packages
       kewlfft.aur.aur:
@@ -174,9 +192,23 @@
           - libadwaita-without-adwaita
           - soulseekqt
           - librewolf-bin
+          - rclone
         state: present
 
+    - name: Undo make `czyrar` be able to use sudo without password
+      become: yes
+      remote_user: root
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        regexp: 'NOPASSWD: ALL$'
+        line: '# %wheel ALL=(ALL:ALL) NOPASSWD: ALL'
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Change shell to zsh
+      become: yes
+      remote_user: root
       ansible.builtin.user:
         name: "{{ user }}"
         shell: /usr/bin/zsh
@@ -191,8 +223,8 @@
     - name: Check if Maple Mono exists
       ansible.builtin.shell: "ls ~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
       register: maple_mono_exists
-      ignore_errors: true
-      changed_when: false
+      ignore_errors: yes
+      changed_when: no
 
     - name: Download Maple Mono
       when: maple_mono_exists is failed
@@ -203,8 +235,8 @@
     - name: Check if there is neovim config
       ansible.builtin.shell: "ls ~{{ user }}/.config/nvim"
       register: nvim_exists
-      ignore_errors: true
-      changed_when: false
+      ignore_errors: yes
+      changed_when: no
 
     - name: Install neovim configuration
       when: nvim_exists is failed
