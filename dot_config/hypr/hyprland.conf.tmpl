@@ -35,12 +35,13 @@ exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESK
 exec-once = systemctl --user enable --now hyprpolkitagent.service
 exec-once = systemctl --user enable --now hypridle.service
 exec-once = systemctl --user enable --now waybar.service
+{{ if ne .chezmoi.hostname "hermes" }}
+exec-once = systemctl --user enable --now gpu-screen-recorder.service
+{{ end }}
 exec-once = hyprctl setcursor adwaita 24
 exec-once = app2unit dunst
 exec-once = app2unit swww-daemon
-{{ if ne .chezmoi.hostname "hermes" }}
 exec-once = app2unit sh ~/.config/gpu-screen-recorder/start-replay.sh
-{{ end }}
 
 # Default programs
 $terminal = app2unit kitty
@@ -198,6 +199,11 @@ bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_SINK@ toggle
 bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_SOURCE@ toggle
 bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
 bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
+{{ end }}
+
+{{ if ne .chezmoi.hostname "hermes" }}
+# Save recording
+bind = $mainMod, F10, exec, killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
 {{ end }}
 
 #                                    !!WINDOW RULES!!                               #
