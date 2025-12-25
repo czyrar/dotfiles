@@ -8,6 +8,16 @@ monitor=eDP-1, 1920x1200@60.00, 0x0, 1
 {{ else if eq .chezmoi.hostname "harrow" }}
 monitor = DP-3, 1920x1080@60.00000, 0x0, 1
 monitor = HDMI-A-1, 1920x1080@60.00000, 1920x0, 1
+workspace = 1, monitor:DP-3
+workspace = 2, monitor:DP-3
+workspace = 3, monitor:DP-3
+workspace = 4, monitor:DP-3
+workspace = 5, monitor:DP-3
+workspace = 6, monitor:HDMI-A-1
+workspace = 7, monitor:HDMI-A-1
+workspace = 8, monitor:HDMI-A-1
+workspace = 9, monitor:HDMI-A-1
+workspace = 10, monitor:HDMI-A-1
 {{ else }}
 monitor = , preferred, auto, 1
 {{ end }}
@@ -152,6 +162,7 @@ bind = $mainMod, 6, workspace, 6
 bind = $mainMod, 7, workspace, 7
 bind = $mainMod, 8, workspace, 8
 bind = $mainMod, 9, workspace, 9
+bind = $mainMod, 0, workspace, 10
 
 # Move a focused window to a workspace with mainMod + SHIFT + [0-9]
 bind = $mainMod SHIFT, 1, movetoworkspace, 1
@@ -163,6 +174,7 @@ bind = $mainMod SHIFT, 6, movetoworkspace, 6
 bind = $mainMod SHIFT, 7, movetoworkspace, 7
 bind = $mainMod SHIFT, 8, movetoworkspace, 8
 bind = $mainMod SHIFT, 9, movetoworkspace, 9
+bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
 # Move and Resize windows with mainMod + LMB/RMB and dragging, drag on edges to resize.
 bindm = $mainMod, mouse:272, movewindow

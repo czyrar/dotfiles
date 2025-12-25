@@ -71,9 +71,16 @@
         "disable-scroll-wraparound": true,
         "active-only": false,
         "format": "{icon}",
+{{ if eq .chezmoi.hostname "harrow" }}
         "persistent-workspaces": {
-             "*": 9,
+             "DP-3": [1,2,3,4,5],
+             "HDMI-A-1": [6,7,8,9,10]
        },
+{{ else }}
+        "persistent-workspaces": {
+             "*": 9
+       },
+{{ end }}
         // TODO: perhaps some icons?
         "format-icons": {
             "1": "1",
@@ -85,6 +92,7 @@
             "7": "7",
             "8": "8",
             "9": "9",
+            "10": "10"
         }
     },
 
@@ -97,7 +105,7 @@
         ]
     },
     "hyprland/window": {
-        "format": "{title}", 
+        "format": "{title}",
         "max-length": 30,
         "min-length": 0,
         "all-outputs": true
@@ -195,7 +203,7 @@
         },
         "on-click": "pgrep wiremix >/dev/null 2>&1 && killall wiremix || app2unit kitty --class waybar-floating wiremix",
         "on-click-right": "pgrep wiremix >/dev/null 2>&1 && killall wiremix || app2unit kitty --class waybar-floating wiremix",
-        "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle",
+        "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
     },
     "backlight": {
         "device": "intel_backlight",
@@ -254,7 +262,7 @@
                 "months":     "<span color='#ffffff'><b><u>{}</u></b></span>",
                 "days":       "<span color='#ffffff'>{}</span>",
                 "weekdays":   "<span color='#ffffff'><b>{}</b></span>",
-                "today":      "<span color='#ff6699'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b>{}</b></span>"
             }
         },
         "actions":  {
