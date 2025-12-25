@@ -40,7 +40,6 @@
           - wireplumber
           - ly
           - uwsm
-          - app2unit
           - snap-pac
           - brightnessctl
           - dash
@@ -49,6 +48,7 @@
           - snapper
           - man-db
           - man-pages
+          - xorg-xauth
           # Graphical apps
           - vlc
           - kitty
@@ -89,13 +89,11 @@
           - impala
           - papirus-icon-theme
           - power-profiles-daemon
-          - wlogout
           ## Extra
           - fuzzel
           - swww
           - hyfetch
           - fastfetch
-          - gpu-screen-recorder
           - pandoc-cli
           - speedtest-cli
           - rclone
@@ -145,34 +143,32 @@
           - zoxide
         state: present
 
+    - name: Select rust toolchain
+      ansible.builtin.shell: "rustup default stable"
+
     - name: Check if yay is installed
       ansible.builtin.shell: "which yay"
       register: yay_installed
       ignore_errors: yes
       changed_when: no
 
-    - name: Download yay
-      when: yay_installed is failed
-      ansible.builtin.git:
-        repo: "https://aur.archlinux.org/yay.git"
-        dest: "~{{ user }}/yay"
-
-    - name: Install yay
-      when: yay_installed is failed
-      ansible.builtin.shell: "makepkg -si"
-      args:
-        chdir: "~{{ user }}/yay"
-
     - name: Make `czyrar` be able to use sudo without password
       become: yes
       remote_user: root
       ansible.builtin.lineinfile:
         path: /etc/sudoers
-        regexp: 'NOPASSWD: ALL$'
+        regexp: '%wheel ALL=(ALL:ALL) NOPASSWD: ALL$'
         line: '%wheel ALL=(ALL:ALL) NOPASSWD: ALL'
         owner: root
         group: root
         mode: '0644'
+
+    - name: Install yay
+      when: yay_installed is failed
+      kewlfft.aur.aur:
+        use: makepkg
+        name:
+          - yay
 
     - name: Full system upgrade (AUR)
       kewlfft.aur.aur:
@@ -184,16 +180,17 @@
       kewlfft.aur.aur:
         use: yay
         name:
-          - xwaylandvideobridge
+          #- xwaylandvideobridge
           - ani-cli
           - mangal-bin
           - juliaup
           - limine-snapper-sync
           - limine-mkinitcpio-hook
           - libadwaita-without-adwaita
-          - soulseekqt
           - librewolf-bin
-          - rclone
+          - app2unit
+          - wlogout
+          - gpu-screen-recorder
         state: present
 
     - name: Undo make `czyrar` be able to use sudo without password
