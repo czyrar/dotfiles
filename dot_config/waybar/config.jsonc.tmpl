@@ -166,11 +166,13 @@
             "wireplumber",
             "custom/split",
             "bluetooth",
+{{ if ne .chezmoi.hostname "harrow" }}
             "custom/split",
             "backlight",
+{{ end }}
             "custom/split",
             "power-profiles-daemon",
-{{ if ne .chezmoi.hostname "asgore" }}
+{{ if ne .chezmoi.hostname "harrow" }}
             "battery",
 {{ end }}
             "custom/closebracket",

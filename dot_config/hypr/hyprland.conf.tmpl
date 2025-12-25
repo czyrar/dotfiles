@@ -5,6 +5,9 @@
 # run `hyprctl monitors all` to see all your monitors!!!
 {{ if eq .chezmoi.hostname "hermes" }}
 monitor=eDP-1, 1920x1200@60.00, 0x0, 1
+{{ else if eq .chezmoi.hostname "harrow" }}
+monitor = DP-3, 1920x1080@60.00000, 0x0, 1
+monitor = HDMI-A-1, 1920x1080@60.00000, 1920x0, 1
 {{ else }}
 monitor = , preferred, auto, 1
 {{ end }}
