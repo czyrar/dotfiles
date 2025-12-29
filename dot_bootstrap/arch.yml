@@ -49,8 +49,10 @@
           - man-db
           - man-pages
           - xorg-xauth
+          - xorg-xlsclients
           # Graphical apps
           - vlc
+          - vlc-plugin-ffmpeg
           - kitty
           - nemo
           - evince
@@ -61,7 +63,6 @@
           - libreoffice-fresh
           - obsidian
           - spotify-launcher
-          - discord
           - xournalpp
           - qbittorrent
           - krita
@@ -81,6 +82,8 @@
           - qt5-wayland
           - qt6-wayland
           - dunst
+          - libadwaita
+          - qt6ctl
           ## Waybar
           - waybar
           - bluetui
@@ -180,17 +183,17 @@
       kewlfft.aur.aur:
         use: yay
         name:
-          #- xwaylandvideobridge
           - ani-cli
           - mangal-bin
           - juliaup
           - limine-snapper-sync
           - limine-mkinitcpio-hook
-          - libadwaita-without-adwaita
           - librewolf-bin
           - app2unit
+          - vesktop
           - wlogout
           - gpu-screen-recorder
+          - zapzap
         state: present
 
     - name: Undo make `czyrar` be able to use sudo without password

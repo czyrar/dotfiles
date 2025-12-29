@@ -71,16 +71,16 @@
         "disable-scroll-wraparound": true,
         "active-only": false,
         "format": "{icon}",
-{{ if eq .chezmoi.hostname "harrow" }}
+{{- if eq .chezmoi.hostname "harrow" }}
         "persistent-workspaces": {
              "DP-3": [1,2,3,4,5],
              "HDMI-A-1": [6,7,8,9,10]
        },
-{{ else }}
+{{- else }}
         "persistent-workspaces": {
              "*": 9
        },
-{{ end }}
+{{- end }}
         // TODO: perhaps some icons?
         "format-icons": {
             "1": "1",
@@ -174,15 +174,15 @@
             "wireplumber",
             "custom/split",
             "bluetooth",
-{{ if ne .chezmoi.hostname "harrow" }}
+{{- if ne .chezmoi.hostname "harrow" }}
             "custom/split",
             "backlight",
-{{ end }}
+{{- end }}
             "custom/split",
             "power-profiles-daemon",
-{{ if ne .chezmoi.hostname "harrow" }}
+{{- if ne .chezmoi.hostname "harrow" }}
             "battery",
-{{ end }}
+{{- end }}
             "custom/closebracket",
             "custom/openbracket",
             "tray",

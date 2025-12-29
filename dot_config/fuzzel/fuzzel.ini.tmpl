@@ -1,8 +1,8 @@
-{{ if ne .chezmoi.hostname "harrow" }}
+{{- if ne .chezmoi.hostname "harrow" }}
 font=Maple Mono NF CN:size=10
-{{ else }}
+{{- else }}
 font=Maple Mono NF CN:size=16
-{{ end }}
+{{- end }}
 prompt="Run: "
 anchor=top
 y-margin=40

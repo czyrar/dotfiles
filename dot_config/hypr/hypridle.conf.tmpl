@@ -8,9 +8,9 @@ listener {
     on-timeout = hyprlock
 }
 
-{{ if eq .chezmoi.hostname "hermes" }}
+{{- if eq .chezmoi.hostname "hermes" }}
 listener {
     timeout = 600
     on-timeout = systemctl suspend
 }
-{{ end }}
+{{- end }}

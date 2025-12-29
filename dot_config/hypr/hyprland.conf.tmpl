@@ -3,9 +3,9 @@
 #                                    !!MONITORS!!                                   #
 
 # run `hyprctl monitors all` to see all your monitors!!!
-{{ if eq .chezmoi.hostname "hermes" }}
+{{- if eq .chezmoi.hostname "hermes" }}
 monitor=eDP-1, 1920x1200@60.00, 0x0, 1
-{{ else if eq .chezmoi.hostname "harrow" }}
+{{- else if eq .chezmoi.hostname "harrow" }}
 $plug1 = DP-3
 $plug2 = HDMI-A-1
 #$plug1 = DP-1
@@ -24,9 +24,24 @@ workspace = 7, monitor:$plug2
 workspace = 8, monitor:$plug2
 workspace = 9, monitor:$plug2
 workspace = 10, monitor:$plug2
-{{ else }}
+{{- else }}
 monitor = , preferred, auto, 1
-{{ end }}
+{{- end }}
+
+#                                    !!SYSTEM!!                               #
+# --------------------------------------------------------------------------------- #
+#                                    !!SYSTEM!!                               #
+
+# Environment variables
+env = GDK_BACKEND,wayland,x11,*
+env = QT_QPA_PLATFORM,wayland;xcb
+env = SDL_VIDEODRIVER,wayland
+env = CLUTTER_BACKEND,wayland
+env = XDG_CURRENT_DESKTOP,Hyprland
+env = XDG_SESSION_TYPE,wayland
+env = XDG_SESSION_DESKTOP,Hyprland
+env = GTK_THEME,Tokyonight-BL-LB-Dark-Storm
+env = QT_QPA_PLATFORMTHEME,qt6ct
 
 # Startup programs. Set as systemctl for UWSM
 exec-once = systemctl --user enable --now pipewire wireplumber pipewire-pulse
@@ -35,9 +50,9 @@ exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESK
 exec-once = systemctl --user enable --now hyprpolkitagent.service
 exec-once = systemctl --user enable --now hypridle.service
 exec-once = systemctl --user enable --now waybar.service
-{{ if ne .chezmoi.hostname "hermes" }}
+{{- if ne .chezmoi.hostname "hermes" }}
 exec-once = systemctl --user enable --now gpu-screen-recorder.service
-{{ end }}
+{{- end }}
 exec-once = hyprctl setcursor adwaita 24
 exec-once = app2unit dunst
 exec-once = app2unit swww-daemon
@@ -48,6 +63,7 @@ $terminal = app2unit kitty
 $fileManager = app2unit nemo
 $menu = pgrep fuzzel > /dev/null 2>&1 && killall fuzzel || fuzzel --launch-prefix='app2unit --fuzzel-compat --'
 $screenshot = app2unit hyprshot --mode region --output-folder /tmp
+$logoutmenu = pgrep wlogout > /dev/null 2>&1 && killall wlogout || app2unit wlogout
 
 #                                    !!INPUT!!                                      #
 # --------------------------------------------------------------------------------- #
@@ -149,7 +165,7 @@ bind = $mainMod, E, exec, $fileManager
 bind = $mainMod SHIFT, SPACE, togglefloating
 bind = $mainMod, F, fullscreen
 bind = $mainMod, D, exec, $menu
-bind = $mainMod, M, exec, uwsm stop
+bind = $mainMod, M, exec, $logoutmenu
 
 # Moving focus
 bind = $mainMod, J, movefocus, d
@@ -191,7 +207,7 @@ bind = $mainMod SHIFT, 0, movetoworkspace, 10
 bindm = $mainMod, mouse:272, movewindow
 bindm = $mainMod, mouse:273, resizewindow
 
-{{ if ne .chezmoi.hostname "harrow" }}
+{{- if ne .chezmoi.hostname "harrow" }}
 # Laptop multimedia keys for volume and LCD brightness
 bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1
 bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_SINK@ 5%-
@@ -199,12 +215,12 @@ bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_SINK@ toggle
 bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_SOURCE@ toggle
 bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
 bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
-{{ end }}
+{{- end }}
 
-{{ if ne .chezmoi.hostname "hermes" }}
+{{- if ne .chezmoi.hostname "hermes" }}
 # Save recording
 bind = $mainMod, F10, exec, killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
-{{ end }}
+{{- end }}
 
 #                                    !!WINDOW RULES!!                               #
 # --------------------------------------------------------------------------------- #
@@ -249,11 +265,3 @@ windowrule = move cursor, class:^(Unity)$, title:^(HDR Color)$
 
 # Dragging XWayland
 windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
-
-# Screenshare XWayland
-windowrule = opacity 0.0 override, class:^(xwaylandvideobridge)$
-windowrule = noanim, class:^(xwaylandvideobridge)$
-windowrule = noinitialfocus, class:^(xwaylandvideobridge)$
-windowrule = maxsize 1 1, class:^(xwaylandvideobridge)$
-windowrule = noblur, class:^(xwaylandvideobridge)$
-windowrule = nofocus, class:^(xwaylandvideobridge)$
