@@ -83,7 +83,7 @@
           - qt6-wayland
           - dunst
           - libadwaita
-          - qt6ctl
+          - qt6ct
           ## Waybar
           - waybar
           - bluetui
