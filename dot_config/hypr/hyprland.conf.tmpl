@@ -63,7 +63,7 @@ $terminal = app2unit kitty
 $fileManager = app2unit nemo
 $menu = pgrep fuzzel > /dev/null 2>&1 && killall fuzzel || fuzzel --launch-prefix='app2unit --fuzzel-compat --'
 $screenshot = app2unit hyprshot --mode region --output-folder /tmp
-$logoutmenu = pgrep wlogout > /dev/null 2>&1 && killall wlogout || app2unit wlogout
+$logoutmenu = pgrep wlogout > /dev/null 2>&1 && killall wlogout || app2unit wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
 
 #                                    !!INPUT!!                                      #
 # --------------------------------------------------------------------------------- #
