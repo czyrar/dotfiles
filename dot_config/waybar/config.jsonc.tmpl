@@ -143,16 +143,16 @@
         "format": "  {usage}%",
         "tooltip": false,
         "interval": 2,
-        "on-click": "kitty --class waybar-floating btop",
-        "on-click-right": "kitty --class waybar-floating btop"
+        "on-click": "kitty --class btop btop",
+        "on-click-right": "kitty --class btop btop"
     },
 
     "memory":{
         "format": "  {percentage}%",
         "tooltip": false,
         "interval": 2,
-        "on-click": "kitty --class waybar-floating btop",
-        "on-click-right": "kitty --class waybar-floating btop"
+        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
     },
     "network" : {
         "interval": 5,
@@ -163,8 +163,8 @@
         "tooltip-format-wifi": "Connected to {essid}",
         "tooltip-format-ethernet": "Connected via {ifname}",
         "tooltip-format-disconnected": "Disconnected",
-        "on-click": "kitty --class waybar-floating impala",
-        "on-click-right": "kitty --class waybar-floating impala"
+        "on-click": "pgrep impala && killall impala || app2unit kitty --class impala impala",
+        "on-click-right": "pgrep impala && killall impala || app2unit kitty --class impala impala"
     },
 
     "group/system": {
@@ -201,8 +201,8 @@
             "portable": " ",
             "default": ["", " ", " "]
         },
-        "on-click": "pgrep wiremix >/dev/null 2>&1 && killall wiremix || app2unit kitty --class waybar-floating wiremix",
-        "on-click-right": "pgrep wiremix >/dev/null 2>&1 && killall wiremix || app2unit kitty --class waybar-floating wiremix",
+        "on-click": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
+        "on-click-right": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
         "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
     },
     "backlight": {
@@ -242,8 +242,8 @@
         "tooltip-format": "{controller_alias}\t{controller_address}",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-        "on-click": "pgrep bluetui >/dev/null 2>&1 && killall bluetui || app2unit kitty --class waybar-floating bluetui",
-        "on-click-right": "pgrep bluetui >/dev/null 2>&1 && killall bluetui || app2unit kitty --class waybar-floating bluetui",
+        "on-click": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
+        "on-click-right": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
         "on-click-middle": "bluetoothctl show | grep 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
     },
     "tray": {
@@ -253,16 +253,16 @@
     "clock": {
         "format": "{:%H:%M}",
         "interval": 1,
-        "tooltip-format": "<tt><span color='#ffffff'><b><big>{:%H:%M:%S}</big></b></span></tt>\n{calendar}",
+        "tooltip-format": "<tt><span color='#C0CAF5'><b><big>{:%H:%M:%S}</big></b></span></tt>\n{calendar}",
         "calendar": {
             "mode"          : "month",
             "mode-mon-col"  : 3,
             "on-scroll"     : 1,
             "format": {
-                "months":     "<span color='#ffffff'><b><u>{}</u></b></span>",
-                "days":       "<span color='#ffffff'>{}</span>",
-                "weekdays":   "<span color='#ffffff'><b>{}</b></span>",
-                "today":      "<span color='#ff6699'><b>{}</b></span>"
+                "months":     "<span color='#C0CAF5'><b><u>{}</u></b></span>",
+                "days":       "<span color='#C0CAF5'>{}</span>",
+                "weekdays":   "<span color='#C0CAF5'><b>{}</b></span>",
+                "today":      "<span color='#F7768E'><b>{}</b></span>"
             }
         },
         "actions":  {

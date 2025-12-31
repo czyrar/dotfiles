@@ -84,6 +84,7 @@
           - dunst
           - libadwaita
           - qt6ct
+          - nwg-look
           ## Waybar
           - waybar
           - bluetui
@@ -100,6 +101,7 @@
           - pandoc-cli
           - speedtest-cli
           - rclone
+          - openconnect
           # Neovim
           - neovim
           - npm
@@ -194,6 +196,7 @@
           - wlogout
           - gpu-screen-recorder
           - zapzap
+          - gp-saml-gui-git
         state: present
 
     - name: Undo make `czyrar` be able to use sudo without password

@@ -56,14 +56,13 @@ exec-once = systemctl --user enable --now gpu-screen-recorder.service
 exec-once = hyprctl setcursor adwaita 24
 exec-once = app2unit dunst
 exec-once = app2unit swww-daemon
-exec-once = app2unit sh ~/.config/gpu-screen-recorder/start-replay.sh
 
 # Default programs
 $terminal = app2unit kitty
 $fileManager = app2unit nemo
-$menu = pgrep fuzzel > /dev/null 2>&1 && killall fuzzel || fuzzel --launch-prefix='app2unit --fuzzel-compat --'
+$menu = pgrep fuzzel && killall fuzzel || fuzzel --launch-prefix='app2unit --fuzzel-compat --'
 $screenshot = app2unit hyprshot --mode region --output-folder /tmp
-$logoutmenu = pgrep wlogout > /dev/null 2>&1 && killall wlogout || app2unit wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
+$logoutmenu = pgrep wlogout && killall wlogout || wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
 
 #                                    !!INPUT!!                                      #
 # --------------------------------------------------------------------------------- #
@@ -93,6 +92,11 @@ input {
 cursor {
   no_hardware_cursors = true
 }
+
+{{- if ne .chezmoi.hostname "harrow" }}
+# Three fingers to switch workspace
+gesture = 3, horizontal, workspace
+{{- end }}
 
 #                                    !!DESIGN!!                                     #
 # --------------------------------------------------------------------------------- #
@@ -227,14 +231,13 @@ bind = $mainMod, F10, exec, killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 &&
 #                                    !!WINDOW RULES!!                               #
 
 # Open TUIs in Waybar
-windowrule = tag +tui-window, match:class waybar-floating
-windowrule = float on, match:tag tui-window
-windowrule = min_size 1600 1000, match:tag tui-window
+windowrule = float on, size 800 700, move 1108 51, match:class impala
+windowrule = float on, size 800 700, move 1108 51, match:class wiremix
+windowrule = float on, size 800 700, move 1108 51, match:class bluetui
+windowrule = float on, size 1600 1000, center on, match:class btop
 
 # KeePass in the upper right corner
-windowrule = float on, match:class ^org.keepassxc.KeePassXC$
-windowrule = min_size 800 700, match:class ^org.keepassxc.KeePassXC$
-windowrule = move 1108 51, match:class ^org.keepassxc.KeePassXC$
+windowrule = float on, size 800 700, move 1108 51, match:class ^org.keepassxc.KeePassXC$
 
 # Config UIs
 windowrule = float on, match:class ^(xdg-desktop-portal-gtk|xdg-desktop-portal-hyprland|Display)$
@@ -264,4 +267,4 @@ windowrule = move cursor, match:class ^(Unity)$, match:title ^(Color)$
 windowrule = move cursor, match:class ^(Unity)$, match:title ^(HDR Color)$
 
 # Dragging XWayland
-windowrule = match:focus 0, match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0
+windowrule = no_focus on, match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0
