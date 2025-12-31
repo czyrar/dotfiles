@@ -143,8 +143,8 @@
         "format": "  {usage}%",
         "tooltip": false,
         "interval": 2,
-        "on-click": "kitty --class btop btop",
-        "on-click-right": "kitty --class btop btop"
+        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
     },
 
     "memory":{

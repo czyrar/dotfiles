@@ -231,13 +231,16 @@ bind = $mainMod, F10, exec, killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 &&
 #                                    !!WINDOW RULES!!                               #
 
 # Open TUIs in Waybar
-windowrule = float on, size 800 700, move 1108 51, match:class impala
-windowrule = float on, size 800 700, move 1108 51, match:class wiremix
-windowrule = float on, size 800 700, move 1108 51, match:class bluetui
-windowrule = float on, size 1600 1000, center on, match:class btop
+windowrule = float on, size 800 700, move 1108 51, match:class ^impala$
+windowrule = float on, size 800 700, move 1108 51, match:class ^wiremix$
+windowrule = float on, size 800 700, move 1108 51, match:class ^bluetui$
+windowrule = float on, size 1600 1000, center on, match:class ^btop$
 
 # KeePass in the upper right corner
 windowrule = float on, size 800 700, move 1108 51, match:class ^org.keepassxc.KeePassXC$
+
+# VLC and MPV should float imo
+windowrule = float on, min_size 1280 720, match:class ^(mpv|vlc)$
 
 # Config UIs
 windowrule = float on, match:class ^(xdg-desktop-portal-gtk|xdg-desktop-portal-hyprland|Display)$
