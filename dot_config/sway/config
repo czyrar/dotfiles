@@ -1,0 +1,176 @@
+# ===================== OUTPUT ====================================
+# Monitors
+# enter `swaymsg -t get_outputs` to get your monitor details.
+output DP-3 pos 0 0 res 1920x1080@60.000Hz
+output HDMI-A-1 pos 1920 0 res 1920x1080@60.000Hz
+# Workspaces
+workspace 1 output DP-1 DP-3
+workspace 2 output DP-1 DP-3
+workspace 3 output DP-1 DP-3
+workspace 4 output DP-1 DP-3
+workspace 5 output DP-1 DP-3
+workspace 6 output DP-2 HDMI-A-1
+workspace 7 output DP-2 HDMI-A-1
+workspace 8 output DP-2 HDMI-A-1
+workspace 9 output DP-2 HDMI-A-1
+workspace 10 output DP-2 HDMI-A-1
+# Disable V-sync for games
+output * allow_tearing yes
+output * max_render_time off
+# =================================================================
+
+# ===================== EXEC ======================================
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec dunst
+exec swww-daemon
+exec gpu-screen-recorder -v no -w screen -s 0x0 -c mkv -q 40000 -a default_output|default_input -f 60 -r 60 -o $HOME/Videos/ -df no -bm cbr
+# Idle
+exec swayidle -w \
+  timeout 300 "sh $HOME/.config/swaylock/prepare_swaylock.sh; swaylock" \
+  timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+  before-sleep "sh $HOME/.config/swaylock/prepare_swaylock.sh; swaylock"
+#
+# =================================================================
+
+# ===================== VARIABLES =================================
+# Super key
+set $mod Mod4
+# Apps
+set $term kitty
+set $file_explorer nautilus
+set $menu pgrep wlogout && killall wlogout || wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
+set $launcher pgrep fuzzel && killall fuzzel || fuzzel
+set $screenshot grim -g "$(slurp)" - | swappy -f -
+set $save_replay killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
+# =================================================================
+
+# ===================== INPUT =====================================
+input type:keyboard {
+  xkb_layout "us,es"
+  xkb_variant "altgr-intl,winkeys"
+  xkb_options "grp:alt_shift_toggle"
+  repeat_rate 35
+  repeat_delay 200
+}
+
+input type:pointer {
+  accel_profile "flat"
+  pointer_accel 0
+}
+
+input type:touchpad {
+  natural_scroll enabled
+}
+# =================================================================
+
+# ===================== LOOKS =====================================
+bar {
+  swaybar_command waybar
+}
+gaps inner 5px
+gaps outer 0px
+default_border pixel 1px
+default_floating_border pixel 1px
+#                          brd.     bg.    text    ind.  c.brd.
+client.focused          #0db9d7 #1a1b26 #1a1b26 #0db9d7 #0db9d7
+client.focused_inactive #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
+client.unfocused        #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
+client.urgent           #f7768e #1a1b26 #1a1b26 #f7768e #f7768e
+client.placeholder      #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
+# =================================================================
+
+# ===================== KEYBINDS ==================================
+# Apps
+bindsym --no-repeat $mod+Return exec $term
+bindsym --no-repeat $mod+e exec $file_explorer
+bindsym --no-repeat $mod+d exec $launcher
+bindsym --no-repeat $mod+m exec $menu
+bindsym --no-repeat $mod+Shift+s exec $screenshot
+bindsym --no-repeat $mod+F10 exec $save_replay
+# Sway
+bindsym --no-repeat $mod+f fullscreen
+bindsym --no-repeat $mod+q kill
+bindsym --no-repeat $mod+Shift+r reload
+bindsym --no-repeat $mod+Shift+space floating toggle
+floating_modifier $mod normal
+# Movement
+bindsym --no-repeat $mod+l focus right
+bindsym --no-repeat $mod+k focus up
+bindsym --no-repeat $mod+j focus down
+bindsym --no-repeat $mod+h focus left
+bindsym --no-repeat $mod+Right focus right
+bindsym --no-repeat $mod+Up focus up
+bindsym --no-repeat $mod+Down focus down
+bindsym --no-repeat $mod+Left focus left
+bindsym --no-repeat $mod+Shift+l move right
+bindsym --no-repeat $mod+Shift+k move up
+bindsym --no-repeat $mod+Shift+j move down
+bindsym --no-repeat $mod+Shift+h move left
+bindsym --no-repeat $mod+Shift+Right move right
+bindsym --no-repeat $mod+Shift+Up move up
+bindsym --no-repeat $mod+Shift+Down move down
+bindsym --no-repeat $mod+Shift+Left move left
+# Resize
+mode "resize" {
+  bindsym $mod+l resize grow width 10px
+  bindsym $mod+k resize shrink height 10px
+  bindsym $mod+j resize grow height 10px
+  bindsym $mod+h resize shrink width 10px
+  bindsym $mod+Right resize grow width 10px
+  bindsym $mod+Up resize shrink height 10px
+  bindsym $mod+Down resize grow height 10px
+  bindsym $mod+Left resize shrink width 10px
+  # Return to default mode
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+#Workspaces
+bindsym --no-repeat $mod+1 workspace number 1
+bindsym --no-repeat $mod+2 workspace number 2
+bindsym --no-repeat $mod+3 workspace number 3
+bindsym --no-repeat $mod+4 workspace number 4
+bindsym --no-repeat $mod+5 workspace number 5
+bindsym --no-repeat $mod+6 workspace number 6
+bindsym --no-repeat $mod+7 workspace number 7
+bindsym --no-repeat $mod+8 workspace number 8
+bindsym --no-repeat $mod+9 workspace number 9
+bindsym --no-repeat $mod+0 workspace number 10
+bindsym --no-repeat $mod+Shift+1 move container to workspace number 1
+bindsym --no-repeat $mod+Shift+2 move container to workspace number 2
+bindsym --no-repeat $mod+Shift+3 move container to workspace number 3
+bindsym --no-repeat $mod+Shift+4 move container to workspace number 4
+bindsym --no-repeat $mod+Shift+5 move container to workspace number 5
+bindsym --no-repeat $mod+Shift+6 move container to workspace number 6
+bindsym --no-repeat $mod+Shift+7 move container to workspace number 7
+bindsym --no-repeat $mod+Shift+8 move container to workspace number 8
+bindsym --no-repeat $mod+Shift+9 move container to workspace number 9
+bindsym --no-repeat $mod+Shift+0 move container to workspace number 10
+bindsym --no-repeat $mod+a focus parent
+# Laptop keys
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_SINK@ 5%-
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_SOURCE@ toggle
+bindsym --locked XF86MonBrightnessUp exec brightnessctl s 10%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl s 10%-
+# Special key to take a screenshot with grim
+# bindsym Print exec grim
+# =================================================================
+
+# ===================== WINDOW RULES ==============================
+for_window [class="steam_app.*"] inhibit_idle focus; floating enable; fullscreen enable
+# Waybar
+for_window [app_id="^(impala|wiremix|bluetui)$"] floating enable; resize set 800px 700px; move position 1108px 51px
+for_window [app_id="^btop$"] floating enable; resize set 1600px 1000px; move position center
+# Videos
+for_window [app_id="^(mpv|vlc)$"] inhibit_idle fullscreen; floating enable; resize set 1280px 720px
+# Pickers, screen-sharing, ...
+for_window [app_id="^xdg-desktop-portal-(gnome|gtk)$"] inhibit_idle open; floating enable
+# KeePassXC
+for_window [app_id="^org.keepassxc.KeePassXC$"] floating enable; resize set 800px 700px; move position 1108px 51px
+# VMD
+for_window [app_id="^(Display|FLTK|Toplevel)$"] floating enable;
+# =================================================================
+
+include /etc/sway/config.d/*
