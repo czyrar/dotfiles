@@ -191,7 +191,6 @@
           - limine-snapper-sync
           - limine-mkinitcpio-hook
           - librewolf-bin
-          - app2unit
           - vesktop
           - wlogout
           - gpu-screen-recorder
