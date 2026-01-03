@@ -88,11 +88,11 @@ animations {
 
 general {
   # Inner and Outer gaps between windows.
-  gaps_in = 2.5
-  gaps_out = 5
+  gaps_in = 1
+  gaps_out = 2
   border_size = 1
-  col.active_border = rgb(0db9d7)
-  col.inactive_border = rgb(7aa2f7)
+  col.active_border = rgb(bb9af7)
+  col.inactive_border = rgb(7dcfff)
 
   # Set to true enable resizing windows by clicking and dragging on borders and gaps
   resize_on_border = true
@@ -103,8 +103,7 @@ general {
 }
 
 decoration {
-  # 8px same as taskbar, change if wanted.
-  rounding = 8
+  rounding = 0
 
   # I want transparancy to not change, since we have the colored border.
   active_opacity = 1.0
@@ -112,9 +111,6 @@ decoration {
 
   # Window Shadow
   shadow:enabled = false
-  shadow:range = 8
-  shadow:render_power = 5
-  shadow:color = rgb(444b6a)
   blur:enabled = false
 }
 
@@ -223,7 +219,7 @@ windowrule = float on, size 800 700, move 1108 51, match:class ^org.keepassxc.Ke
 windowrule = float on, min_size 1280 720, match:class ^mpv$
 
 # Config UIs
-windowrule = float on, match:class ^(xdg-desktop-portal-gtk|xdg-desktop-portal-hyprland)$
+windowrule = float on, match:class ^xdg-desktop-portal-(gtk|hyprland)$
 
 # Fix VMD
 windowrule = float on, match:class ^(Display|FLTK|Toplevel)$
@@ -251,3 +247,11 @@ windowrule = move cursor, match:class ^(Unity)$, match:title ^(HDR Color)$
 
 # Dragging XWayland
 windowrule = no_focus on, match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0
+
+# Smart gaps
+workspace = w[tv1], gapsout:0, gapsin:0
+workspace = f[1], gapsout:0, gapsin:0
+windowrule = border_size 0, match:float 0, match:workspace w[tv1]
+windowrule = rounding 0, match:float 0, match:workspace w[tv1]
+windowrule = border_size 0, match:float 0, match:workspace f[1]
+windowrule = rounding 0, match:float 0, match:workspace f[1]

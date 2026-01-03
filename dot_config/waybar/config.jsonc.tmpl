@@ -1,69 +1,65 @@
 {
     "height": 30,
     "spacing": 5,
-    "margin-top": 5,
-    "margin-bottom": 0,
-    "margin-left": 5,
-    "margin-right": 5,
 
-    // Idea:
-    //  L -> arch button, workspaces and window name
-    //  C -> media
-    //  R -> System info and tray
     "modules-left": [
-        "group/utilities",
-        "group/workspaces",
-        "group/windows"
+        "hyprland/workspaces",
+        "custom/sep",
+        "hyprland/window"
     ],
     "modules-center": [
-        "mpris"
+        "clock"
     ],
     "modules-right": [
-        "group/cpuram",
-        "group/system"
+        "group/system",
+        "custom/sep",
+        "network",
+        "custom/sep",
+        "group/multimedia",
+        "custom/sep",
+        "group/power",
+        "custom/sep",
+        "hyprland/language",
+        "custom/sep",
+        "tray"
     ],
 
-    // Separators
-    "custom/openbracket": {
-        "format": "[",
-        "tooltip": false
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": [
+          "cpu",
+          "custom/space",
+          "memory"
+        ]
     },
-    "custom/closebracket": {
-        "format": "]",
-        "tooltip": false
+    "group/multimedia": {
+        "orientation": "horizontal",
+        "modules": [
+          "wireplumber",
+          "custom/space",
+          "bluetooth"
+        ]
     },
-    "custom/split": {
+    "group/power": {
+        "orientation": "horizontal",
+        "modules": [
+{{- if ne .chezmoi.hostname "harrow" }}
+          "battery",
+          "custom/space",
+{{- end }}
+          "power-profiles-daemon"
+        ]
+    },
+
+    "custom/sep": {
         "format": "|",
         "tooltip": false
     },
-
-    // BEGIN LEFT
-    // Just the arch button to access a logout menu
-    // TODO: perhaps a keybind is enough?
-    "group/utilities":{
-        "orientation": "horizontal",
-        "modules":[
-            "custom/openbracket",
-            "custom/arch",
-            "custom/closebracket"
-        ]
-    },
-    "custom/arch": {
-        "format": " 󰣇 ",
-        "tooltip": false,
-        "on-click": "wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5",
-        "on-click-right": "wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5"
+    "custom/space": {
+        "format": " ",
+        "tooltip": false
     },
 
-    // All workspaces
-    "group/workspaces":{
-        "orientation": "horizontal",
-        "modules": [
-            "custom/openbracket",
-            "hyprland/workspaces",
-            "custom/closebracket"
-        ]
-    },
     "hyprland/workspaces": {
         "all-outputs": true,
         "warp-on-scroll": false,
@@ -71,19 +67,12 @@
         "disable-scroll-wraparound": true,
         "active-only": false,
         "format": "{icon}",
-{{- if eq .chezmoi.hostname "harrow" }}
         "persistent-workspaces": {
              // "DP-1": [1,2,3,4,5],
              // "DP-2": [6,7,8,9,10]
              "DP-3": [1,2,3,4,5],
              "HDMI-A-1": [6,7,8,9,10]
        },
-{{- else }}
-        "persistent-workspaces": {
-             "*": 9
-       },
-{{- end }}
-        // TODO: perhaps some icons?
         "format-icons": {
             "1": "1",
             "2": "2",
@@ -97,161 +86,13 @@
             "10": "10"
         }
     },
-
-    "group/windows": {
-        "orientation":"horizontal",
-        "modules":[
-            "custom/openbracket",
-            "hyprland/window",
-            "custom/closebracket"
-        ]
-    },
     "hyprland/window": {
         "format": "{title}",
         "max-length": 30,
         "min-length": 0,
         "all-outputs": true
     },
-    // END LEFT
 
-    // BEGIN CENTRE
-    "mpris": {
-        "format": " [ {status_icon} | {dynamic} ] ",
-        "interval": 1,
-        "dynamic-len": 40,
-        "status-icons": {
-            "playing": "▶",
-            "paused": "⏸",
-            "stopped": ""
-        },
-        "dynamic-order": ["title", "artist"]
-    },
-    // END CENTRE
-
-    // BEGIN RIGHT
-    "group/cpuram": {
-        "orientation": "horizontal",
-        "modules": [
-            "custom/openbracket",
-            "cpu",
-            "custom/split",
-            "memory",
-            "custom/split",
-            "network",
-            "custom/closebracket"
-        ]
-    },
-    "cpu": {
-        "format": "  {usage}%",
-        "tooltip": false,
-        "interval": 2,
-        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
-        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
-    },
-
-    "memory":{
-        "format": "  {percentage}%",
-        "tooltip": false,
-        "interval": 2,
-        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
-        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
-    },
-    "network" : {
-        "interval": 5,
-        "format-wifi": "{icon} {bandwidthDownBits}",
-        "format-ethernet": " {bandwidthDownBits}",
-        "format-disconnected": "󰤮 ",
-        "format-icons": ["󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "],
-        "tooltip-format-wifi": "Connected to {essid}",
-        "tooltip-format-ethernet": "Connected via {ifname}",
-        "tooltip-format-disconnected": "Disconnected",
-        "on-click": "pgrep impala && killall impala || app2unit kitty --class impala impala",
-        "on-click-right": "pgrep impala && killall impala || app2unit kitty --class impala impala"
-    },
-
-    "group/system": {
-        "orientation": "horizontal",
-        "modules": [
-            "custom/openbracket",
-            "wireplumber",
-            "custom/split",
-            "bluetooth",
-{{- if ne .chezmoi.hostname "harrow" }}
-            "custom/split",
-            "backlight",
-{{- end }}
-            "custom/split",
-            "power-profiles-daemon",
-{{- if ne .chezmoi.hostname "harrow" }}
-            "battery",
-{{- end }}
-            "custom/closebracket",
-            "custom/openbracket",
-            "tray",
-            "clock",
-            "custom/split",
-            "hyprland/language",
-            "custom/closebracket"
-        ]
-    },
-    "wireplumber": {
-        "scroll-step": 5,
-        "format": "{icon} {volume}%",
-        "format-muted": " ",
-        "format-icons": {
-            "phone": " ",
-            "portable": " ",
-            "default": ["", " ", " "]
-        },
-        "on-click": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
-        "on-click-right": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
-        "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
-    },
-    "backlight": {
-        "device": "intel_backlight",
-        "format": "{icon} {percent}%",
-        "format-icons": [" ", " "],
-        "tooltip": false
-    },
-    "power-profiles-daemon": {
-        "format": " {icon} ",
-        "tooltip-format": "Power profile: {profile}",
-        "format-icons": {
-            "default": "󰾅",
-            "performance": "󰓅",
-            "balanced": "󰾅",
-            "power-saver": "󰾆"
-        }
-    },
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon} {capacity}%",
-        "format-full": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-icons": [" ", " ", " ", " ", " "]
-    },
-    "bluetooth": {
-        "format": " 󰂯 ",
-        "format-disabled": " 󰂲 ",
-        "format-off": " 󰂲 ",
-        "format-on": " 󰂯 ",
-        "format-connected": " 󰂱 ",
-        "format-connected-battery": " 󰂱 {device_battery_percentage}%",
-        "tooltip-format": "{controller_alias}\t{controller_address}",
-        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-        "on-click": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
-        "on-click-right": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
-        "on-click-middle": "bluetoothctl show | grep 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
-    },
-    "tray": {
-        "icon-size": 14,
-        "spacing": 10
-    },
     "clock": {
         "format": "{:%H:%M}",
         "interval": 1,
@@ -274,8 +115,87 @@
             "on-scroll-down": "shift_down"
         }
     },
+
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": false,
+        "interval": 2,
+        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
+    },
+    "memory":{
+        "format": "  {percentage}%",
+        "tooltip": false,
+        "interval": 2,
+        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
+    },
+    "network" : {
+        "interval": 5,
+        "format-wifi": "{icon} {bandwidthDownBits}",
+        "format-ethernet": " {bandwidthDownBits}",
+        "format-disconnected": "󰤮 ",
+        "format-icons": ["󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "],
+        "tooltip-format-wifi": "Connected to {essid}",
+        "tooltip-format-ethernet": "Connected via {ifname}",
+        "tooltip-format-disconnected": "Disconnected",
+        "on-click": "pgrep impala && killall impala || app2unit kitty --class impala impala",
+        "on-click-right": "pgrep impala && killall impala || app2unit kitty --class impala impala"
+    },
+    "wireplumber": {
+        "scroll-step": 5,
+        "format": "{icon} {volume}%",
+        "format-muted": " ",
+        "format-icons": {
+            "phone": " ",
+            "portable": " ",
+            "default": ["", " ", " "]
+        },
+        "on-click": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
+        "on-click-right": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
+        "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
+    },
+    "bluetooth": {
+        "format": " 󰂯 ",
+        "format-disabled": " 󰂲 ",
+        "format-off": " 󰂲 ",
+        "format-on": " 󰂯 ",
+        "format-connected": " 󰂱 ",
+        "format-connected-battery": " 󰂱 {device_battery_percentage}%",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
+        "on-click-right": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
+        "on-click-middle": "bluetoothctl show | grep 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-icons": [" ", " ", " ", " ", " "]
+    },
+    "power-profiles-daemon": {
+        "format": " {icon} ",
+        "tooltip-format": "Power profile: {profile}",
+        "format-icons": {
+            "default": "󰾅",
+            "performance": "󰓅",
+            "balanced": "󰾅",
+            "power-saver": "󰾆"
+        }
+    },
+    "tray": {
+        "icon-size": 14,
+        "spacing": 10
+    },
     "hyprland/language": {
-        "format-en": " en",
-        "format-es": " es"
+        "format-en": "en",
+        "format-es": "es"
     }
 }

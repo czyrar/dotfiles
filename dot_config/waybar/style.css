@@ -1,143 +1,107 @@
-/* font declared */
+@define-color bg     #1A1B26;
+@define-color fg     #C0CAF5;
+@define-color red    #F7768E;
+@define-color green  #9ECE6A;
+@define-color yellow #E0AF68;
+@define-color blue   #7AA2F7;
+@define-color purple #BB9AF7;
+@define-color cyan   #7DCFFF;
+@define-color gray   #414868;
+
 * {
   font-family: "Maple Mono NF CN";
   font-size: 14px;
-  border-radius: 8px;
-  padding: 0px;
 }
 
-#custom-openbracket,
-#custom-closebracket {
-  margin: 0 5px;
-}
-
-/* general bar */
 window#waybar {
-  background-color: transparent;
-  border-bottom: 0;
-  color: #C0CAF5;
-  transition: background-color 0.5s;
+  background-color: @bg;
+  color: @fg;
+  border-radius: 0px;
 }
 
-window#waybar.hidden {
-  opacity: 0.2;
-}
-
-window#waybar.empty #window {
-  background-color: #1A1B26;
-}
-
-/* configuring the modules */
-.modules-left {
-  background-color: #1A1B26;
-  border: 1px solid #7AA2F7;
-}
-
-/* .modules-center { */
-/*   background-color: #1A1B26; */
-/*   border: 1px solid #7AA2F7; */
-/* } */
-
-.modules-right {
-  background-color: #1A1B26;
-  border: 1px solid #7AA2F7;
-}
-
-
-/* whats this?? */
-button {
-  border: none;
-}
-
-
-/* left island */
-
-/* menu pannel */
-#custom-arch,
-#custom-powerprofile,
-#custom-themeswitcher {
-  padding-right: 10px;
-  padding-left: 5px;
-  font-size: 15px;
-  border-radius: 8px;
-}
-
-/* workspace pannel */
 #workspaces button {
-  min-width: 0;
-  padding: 0 8px 0 8px;
-  background-color: transparent;
-  color: #C0CAF5;
+    padding: 0 6px;
+    color: @fg;
+    background: transparent;
+    border-bottom: 3px solid @bg;
+    border-radius: 0px;
 }
-
-#workspaces button.empty {
-  color: #444B6A;
-}
-
 #workspaces button.active {
-  color: #0DB9D7;
+    color: @cyan;
+    border-bottom: 3px solid @purple;
+    border-radius: 0px;
+}
+#workspaces button.empty {
+    color: @gray;
+}
+#workspaces button.empty.active {
+    color: @cyan;
+    border-bottom: 3px solid @purple;
+    border-radius: 0px;
 }
 
 #workspaces button.urgent {
-  background-color: #F7768E;
+    background-color: @red;
 }
 
-/* no idea what this does */
-.modules-left>widget:first-child>#workspaces {
-  margin-left: 0;
+button:hover {
+    background: inherit;
+    box-shadow: inset 0 -3px @fg;
 }
 
-.modules-right>widget:last-child>#workspaces {
-  margin-right: 0;
+#window,
+#tray {
+  padding: 0 8px;
+  color: @fg;
 }
 
-/* media player */
-#mpris {
-  border: 1px solid #7AA2F7;
-  background-color: #1A1B26;
-  color: #C0CAF5;
+#custom-sep {
+    color: @gray;
 }
 
-#mpris.playing {
-  background-color: #0DB9D7;
-  color: #1A1B26;
+#clock {
+  color: @cyan;
+  border-bottom: 3px solid @cyan;
 }
 
-
-/* center module  */
-#window {
-  padding: 0 5px;
-}
-
-/* Right Island */
-
-/* module general styles */
-#clock,
-#battery,
 #cpu,
-#memory,
-#custom-clipboard,
-#custom-bluetooth,
+#memory {
+  color: @yellow;
+}
+
+#system {
+  border-bottom: 3px solid @yellow;
+}
+
 #network {
-  padding: 0 10px;
+  color: @purple;
+  border-bottom: 3px solid @purple;
 }
 
-#idle_inhibitor {
-  padding: 0 10px 0 0;
+#wireplumber,
+#bluetooth {
+  color: @blue;
 }
 
-#custom-powerprofile {
-  padding: 0 8px 0 4px;
+#multimedia {
+  border-bottom: 3px solid @blue;
 }
 
-/* Remaining Modules */
-#backlight,
-#wireplumber {
-  padding: 0 5px;
+#battery,
+#power-profiles-daemon {
+  color: @green;
+}
+
+#power {
+  border-bottom: 3px solid @green;
 }
 
 #battery.critical:not(.charging) {
-  background-color: #F7768E;
-  color: #C0CAF5;
+  color: @red;
   animation: blink 0.5s steps(12) infinite alternate;
+}
+
+#language {
+  color: @red;
+  border-bottom: 3px solid @red;
 }
