@@ -120,15 +120,15 @@
         "format": "  {usage}%",
         "tooltip": false,
         "interval": 2,
-        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
-        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
+        "on-click": "pgrep btop && killall btop || kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || kitty --class btop btop"
     },
     "memory":{
-        "format": "  {percentage}%",
+        "format": "   {percentage}%",
         "tooltip": false,
         "interval": 2,
-        "on-click": "pgrep btop && killall btop || app2unit kitty --class btop btop",
-        "on-click-right": "pgrep btop && killall btop || app2unit kitty --class btop btop"
+        "on-click": "pgrep btop && killall btop || kitty --class btop btop",
+        "on-click-right": "pgrep btop && killall btop || kitty --class btop btop"
     },
     "network" : {
         "interval": 5,
@@ -139,8 +139,8 @@
         "tooltip-format-wifi": "Connected to {essid}",
         "tooltip-format-ethernet": "Connected via {ifname}",
         "tooltip-format-disconnected": "Disconnected",
-        "on-click": "pgrep impala && killall impala || app2unit kitty --class impala impala",
-        "on-click-right": "pgrep impala && killall impala || app2unit kitty --class impala impala"
+        "on-click": "pgrep impala && killall impala || kitty --class impala impala",
+        "on-click-right": "pgrep impala && killall impala || kitty --class impala impala"
     },
     "wireplumber": {
         "scroll-step": 5,
@@ -151,22 +151,22 @@
             "portable": " ",
             "default": ["", " ", " "]
         },
-        "on-click": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
-        "on-click-right": "pgrep wiremix && killall wiremix || app2unit kitty --class wiremix wiremix",
+        "on-click": "pgrep wiremix && killall wiremix || kitty --class wiremix wiremix",
+        "on-click-right": "pgrep wiremix && killall wiremix || kitty --class wiremix wiremix",
         "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
     },
     "bluetooth": {
-        "format": " 󰂯 ",
+        "format": " 󰂯 ",
         "format-disabled": " 󰂲 ",
         "format-off": " 󰂲 ",
         "format-on": " 󰂯 ",
         "format-connected": " 󰂱 ",
-        "format-connected-battery": " 󰂱 {device_battery_percentage}%",
+        "format-connected-battery": "󰂱 {device_battery_percentage}%",
         "tooltip-format": "{controller_alias}\t{controller_address}",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-        "on-click": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
-        "on-click-right": "pgrep bluetui && killall bluetui || app2unit kitty --class bluetui bluetui",
+        "on-click": "pgrep bluetui && killall bluetui || kitty --class bluetui bluetui",
+        "on-click-right": "pgrep bluetui && killall bluetui || kitty --class bluetui bluetui",
         "on-click-middle": "bluetoothctl show | grep 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
     },
     "battery": {
@@ -181,18 +181,18 @@
         "format-icons": [" ", " ", " ", " ", " "]
     },
     "power-profiles-daemon": {
-        "format": " {icon} ",
+        "format": "{icon}",
         "tooltip-format": "Power profile: {profile}",
         "format-icons": {
-            "default": "󰾅",
-            "performance": "󰓅",
-            "balanced": "󰾅",
-            "power-saver": "󰾆"
+            "default": " 󰾅 ",
+            "performance": " 󰓅 ",
+            "balanced": " 󰾅 ",
+            "power-saver": " 󰾆 "
         }
     },
     "tray": {
         "icon-size": 14,
-        "spacing": 10
+        "spacing": 14
     },
     "hyprland/language": {
         "format-en": "en",

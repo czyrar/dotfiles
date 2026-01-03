@@ -39,7 +39,6 @@
           - pipewire-pulse
           - wireplumber
           - ly
-          - uwsm
           - snap-pac
           - brightnessctl
           - dash

@@ -33,14 +33,16 @@ monitor = , preferred, auto, 1
 #                                    !!SYSTEM!!                                     #
 
 # Startup programs
+exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec-once = hypridle
+exec-once = dunst
+exec-once = swww-daemon
 exec-once = hyprctl setcursor adwaita 24
-exec-once = uwsm-app dunst
-exec-once = uwsm-app swww-daemon
 
 # Default programs
-$terminal = uwsm-app kitty
-$fileManager = uwsm-app nemo
-$menu = pgrep fuzzel && killall fuzzel || fuzzel --launch-prefix='uwsm-app --'
+$terminal = kitty
+$fileManager = nemo
+$menu = pgrep fuzzel && killall fuzzel || fuzzel
 $screenshot = hyprshot --mode region --output-folder /home/czyrar/Pictures/Screenshots
 $logoutmenu = pgrep wlogout && killall wlogout || wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
 

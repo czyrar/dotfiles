@@ -1,3 +1,13 @@
+@define-color bg     #1A1B26;
+@define-color fg     #C0CAF5;
+@define-color red    #F7768E;
+@define-color green  #9ECE6A;
+@define-color yellow #E0AF68;
+@define-color blue   #7AA2F7;
+@define-color purple #BB9AF7;
+@define-color cyan   #7DCFFF;
+@define-color gray   #414868;
+
 * {
 	background-image: none;
 	box-shadow: none;
@@ -9,10 +19,10 @@ window {
 
 button {
     border-radius: 8;
-    border-color: #0DB9D7;
-	text-decoration-color: #C0CAF5;
-    color: #C0CAF5;
-	background-color: #1A1B26;
+    border-color: @purple;
+	text-decoration-color: @fg;
+    color: @fg;
+	background-color: @bg;
 	border-style: solid;
 	border-width: 1px;
 	background-repeat: no-repeat;
@@ -21,7 +31,7 @@ button {
 }
 
 button:hover {
-	background-color: #444B6A;
+	background-color: @gray;
 	background-size: 25%;
 	outline-style: none;
 }
