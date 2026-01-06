@@ -8,9 +8,8 @@ listener {
     on-timeout = hyprlock
 }
 
-{{- if eq .chezmoi.hostname "hermes" }}
 listener {
     timeout = 600
-    on-timeout = systemctl suspend
+    on-timeout = hyprctl dispatch dpms off
+    on-resume = hyprctl dispatch dpms on
 }
-{{- end }}

@@ -10,7 +10,7 @@
 
 * {
   font-family: "Maple Mono NF CN";
-  font-size: 14px;
+  font-size: 12px;
 }
 
 window#waybar {
@@ -20,13 +20,13 @@ window#waybar {
 }
 
 #workspaces button {
-    padding: 0 6px;
+    padding: 0 3px;
     color: @fg;
     background: transparent;
     border-bottom: 3px solid @bg;
     border-radius: 0px;
 }
-#workspaces button.active {
+#workspaces button.focused {
     color: @cyan;
     border-bottom: 3px solid @purple;
     border-radius: 0px;
@@ -34,7 +34,7 @@ window#waybar {
 #workspaces button.empty {
     color: @gray;
 }
-#workspaces button.empty.active {
+#workspaces button.empty.focused {
     color: @cyan;
     border-bottom: 3px solid @purple;
     border-radius: 0px;

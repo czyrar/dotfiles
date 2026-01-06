@@ -37,6 +37,7 @@
           - pipewire-alsa
           - pipewire-jack
           - pipewire-pulse
+          - alsa-utils
           - wireplumber
           - ly
           - snap-pac
@@ -52,7 +53,6 @@
           # Graphical apps
           - vlc
           - vlc-plugin-ffmpeg
-          - kitty
           - nemo
           - evince
           - gimp
@@ -69,15 +69,37 @@
           - eog
           - calibre
           ## Hyprland
-          - hyprland
-          - xdg-desktop-portal-hyprland
+          # - hyprland
+          # - kitty
+          # - fuzzel
+          # - swww
+          # - xdg-desktop-portal-hyprland
+          # - xdg-desktop-portal-gtk
+          # - polkit-gnome
+          # - hypridle
+          # - hyprlock
+          # - hyprpicker
+          # - hyprshot
+          # - hyprland-qt-support
+          # - qt5-wayland
+          # - qt6-wayland
+          # - dunst
+          # - libadwaita
+          # - qt6ct
+          # - nwg-look
+          ## Sway
+          - sway
+          - foot
+          - rofi
+          - swww
+          - xdg-desktop-portal-wlr
           - xdg-desktop-portal-gtk
-          - hypridle
-          - hyprlock
-          - hyprpicker
-          - hyprshot
-          - hyprpolkitagent
-          - hyprland-qt-support
+          - swayidle
+          - gtklock
+          - grim
+          - slurp
+          - swappy
+          - polkit-gnome
           - qt5-wayland
           - qt6-wayland
           - dunst
@@ -93,8 +115,6 @@
           - papirus-icon-theme
           - power-profiles-daemon
           ## Extra
-          - fuzzel
-          - swww
           - hyfetch
           - fastfetch
           - pandoc-cli

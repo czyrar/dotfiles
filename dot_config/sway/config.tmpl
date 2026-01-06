@@ -1,47 +1,55 @@
 # ===================== OUTPUT ====================================
 # Monitors
 # enter `swaymsg -t get_outputs` to get your monitor details.
+{{- if eq .chezmoi.hostname "harrow" }}
+# output DP-1 pos 0 0 res 1920x1080@175.000Hz
+# output DP-2 pos -1920 0 res 1920x1080@60.000Hz
 output DP-3 pos 0 0 res 1920x1080@60.000Hz
 output HDMI-A-1 pos 1920 0 res 1920x1080@60.000Hz
+{{- else if eq .chezmoi.hostname "nona" }}
+output eDP-1 pos 0 0 res 1920x1080@60.000Hz
+{{- end }}
+{{- if eq .chezmoi.hostname "harrow" }}
 # Workspaces
 workspace 1 output DP-1 DP-3
-workspace 2 output DP-1 DP-3
 workspace 3 output DP-1 DP-3
-workspace 4 output DP-1 DP-3
 workspace 5 output DP-1 DP-3
+workspace 7 output DP-1 DP-3
+workspace 9 output DP-1 DP-3
+workspace 2 output DP-2 HDMI-A-1
+workspace 4 output DP-2 HDMI-A-1
 workspace 6 output DP-2 HDMI-A-1
-workspace 7 output DP-2 HDMI-A-1
 workspace 8 output DP-2 HDMI-A-1
-workspace 9 output DP-2 HDMI-A-1
 workspace 10 output DP-2 HDMI-A-1
 # Disable V-sync for games
-output * allow_tearing yes
-output * max_render_time off
+output DP-1 allow_tearing yes
+output DP-1 max_render_time off
+{{- end }}
 # =================================================================
 
 # ===================== EXEC ======================================
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec dunst
 exec swww-daemon
-exec gpu-screen-recorder -v no -w screen -s 0x0 -c mkv -q 40000 -a default_output|default_input -f 60 -r 60 -o $HOME/Videos/ -df no -bm cbr
 # Idle
 exec swayidle -w \
-  timeout 300 "sh $HOME/.config/swaylock/prepare_swaylock.sh; swaylock" \
+  timeout 300 "sh $HOME/.config/gtklock/prepare_gtklock.sh; gtklock" \
   timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-  before-sleep "sh $HOME/.config/swaylock/prepare_swaylock.sh; swaylock"
-#
+  before-sleep "sh $HOME/.config/gtklock/prepare_gtklock.sh; gtklock"
 # =================================================================
 
 # ===================== VARIABLES =================================
 # Super key
 set $mod Mod4
 # Apps
-set $term kitty
-set $file_explorer nautilus
-set $menu pgrep wlogout && killall wlogout || wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
-set $launcher pgrep fuzzel && killall fuzzel || fuzzel
-set $screenshot grim -g "$(slurp)" - | swappy -f -
-set $save_replay killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
+set $term            foot
+set $file_explorer   nemo
+set $menu            pgrep wlogout && killall wlogout || wlogout --buttons-per-row 2 --row-spacing 5 --column-spacing 5
+set $launcher        pgrep rofi && killall rofi || rofi -modes "drun,calc,window" -show drun
+set $admin           pgrep btop && killall btop || foot --app-id btop btop
+set $fast_screenshot grim -g "$(slurp)" - | wl-copy
+set $screenshot      grim -g "$(slurp)" - | swappy -f -
+set $save_replay     killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
 # =================================================================
 
 # ===================== INPUT =====================================
@@ -61,22 +69,46 @@ input type:pointer {
 input type:touchpad {
   natural_scroll enabled
 }
+
+input type:tablet_pad {
+{{- if eq .chezmoi.hostname "harrow" }}
+  # map_to_output DP-1
+  map_to_output DP-3
+{{- else if eq .chezmoi.hostname "nona" }}
+  map_to_outpute eDP-1
+{{- end }}
+}
 # =================================================================
 
 # ===================== LOOKS =====================================
 bar {
   swaybar_command waybar
+
+  # position top
+  # font "Maple Mono NF CN 8"
+  #
+  # colors {
+  #   background #1A1B26
+  #   statusline #1A1B26
+  #   focused_workspace #BB9AF7 #1A1B26 #7DCFFF
+  #   active_workspace #1A1B26 #1A1B26 #C0CAF5
+  #   inactive_workspace #1A1B26 #1A1B26 #C0CAF5
+  #   urgent_workspace #F7768E #F7768E88 #1A1B26
+  # }
 }
-gaps inner 5px
+gaps inner 1px
 gaps outer 0px
 default_border pixel 1px
 default_floating_border pixel 1px
+default_orientation auto
+smart_borders on
+smart_gaps on
 #                          brd.     bg.    text    ind.  c.brd.
-client.focused          #0db9d7 #1a1b26 #1a1b26 #0db9d7 #0db9d7
-client.focused_inactive #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
-client.unfocused        #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
-client.urgent           #f7768e #1a1b26 #1a1b26 #f7768e #f7768e
-client.placeholder      #7aa2f7 #1a1b26 #1a1b26 #7aa2f7 #7aa2f7
+client.focused          #BB9AF7 #1A1B26 #C0CAF5 #BB9AF7 #BB9AF7
+client.focused_inactive #7DCFFF #1A1B26 #C0CAF5 #7DCFFF #7DCFFF
+client.unfocused        #7DCFFF #1A1B26 #C0CAF5 #7DCFFF #7DCFFF
+client.urgent           #F7768E #1A1B26 #C0CAF5 #F7768E #F7768E
+client.placeholder      #7DCFFF #1A1B26 #C0CAF5 #7DCFFF #7DCFFF
 # =================================================================
 
 # ===================== KEYBINDS ==================================
@@ -85,8 +117,9 @@ bindsym --no-repeat $mod+Return exec $term
 bindsym --no-repeat $mod+e exec $file_explorer
 bindsym --no-repeat $mod+d exec $launcher
 bindsym --no-repeat $mod+m exec $menu
-bindsym --no-repeat $mod+Shift+s exec $screenshot
-bindsym --no-repeat $mod+F10 exec $save_replay
+bindsym --no-repeat $mod+Shift+s exec $fast_screenshot
+bindsym --no-repeat Print exec $screenshot
+bindsym --no-repeat Control+Shift+Escape exec $admin
 # Sway
 bindsym --no-repeat $mod+f fullscreen
 bindsym --no-repeat $mod+q kill
@@ -147,29 +180,37 @@ bindsym --no-repeat $mod+Shift+8 move container to workspace number 8
 bindsym --no-repeat $mod+Shift+9 move container to workspace number 9
 bindsym --no-repeat $mod+Shift+0 move container to workspace number 10
 bindsym --no-repeat $mod+a focus parent
-# Laptop keys
+# Multimedia keys
 bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1
 bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_SINK@ 5%-
 bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_SINK@ toggle
 bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_SOURCE@ toggle
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioStop exec playerctl stop
+bindsym --locked XF86AudioPrev exec playerctl previous
+bindsym --locked XF86AudioNext exec playerctl next
 bindsym --locked XF86MonBrightnessUp exec brightnessctl s 10%+
 bindsym --locked XF86MonBrightnessDown exec brightnessctl s 10%-
-# Special key to take a screenshot with grim
-# bindsym Print exec grim
+bindsym --locked XF86Search exec $menu
+{{- if ne .chezmoi.hostname "nona" }}
+# Recording
+bindsym --no-repeat $mod+F10 exec $save_replay
+{{- end }}
 # =================================================================
 
 # ===================== WINDOW RULES ==============================
-for_window [class="steam_app.*"] inhibit_idle focus; floating enable; fullscreen enable
-# Waybar
-for_window [app_id="^(impala|wiremix|bluetui)$"] floating enable; resize set 800px 700px; move position 1108px 51px
+# Games -> floating, fullscreen, no idle if focused, tearing
+for_window [class="steam_app.*"] inhibit_idle focus; floating enable; fullscreen enable; allow_tearing yes
+# Waybar -> floating, upper right position (except btop centered)
+for_window [app_id="^(impala|wiremix|bluetui)$"] floating enable; resize set 800px 700px; move position 1122px 1px
 for_window [app_id="^btop$"] floating enable; resize set 1600px 1000px; move position center
-# Videos
-for_window [app_id="^(mpv|vlc)$"] inhibit_idle fullscreen; floating enable; resize set 1280px 720px
-# Pickers, screen-sharing, ...
-for_window [app_id="^xdg-desktop-portal-(gnome|gtk)$"] inhibit_idle open; floating enable
-# KeePassXC
-for_window [app_id="^org.keepassxc.KeePassXC$"] floating enable; resize set 800px 700px; move position 1108px 51px
-# VMD
+# Videos (VLC is buggy) -> floating, 720p default, no idle if fullscreen
+for_window [app_id="^mpv$"] inhibit_idle fullscreen; floating enable; resize set 1280px 720px
+# Pickers, screen-sharing, ... -> floating, no idle
+for_window [app_id="^xdg-desktop-portal-(wlr|gtk)$"] inhibit_idle open; floating enable
+# KeePassXC -> floating, upper right position
+for_window [app_id="^org.keepassxc.KeePassXC$"] floating enable; resize set 800px 700px; move position 1122px 1px
+# VMD -> floating
 for_window [app_id="^(Display|FLTK|Toplevel)$"] floating enable;
 # =================================================================
 

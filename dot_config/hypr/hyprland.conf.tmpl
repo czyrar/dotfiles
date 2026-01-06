@@ -22,7 +22,7 @@ workspace = 7, monitor:$plug2
 workspace = 8, monitor:$plug2
 workspace = 9, monitor:$plug2
 workspace = 10, monitor:$plug2
-{{- else if eq .chezmoi.hostname "hermes" }}
+{{- else if eq .chezmoi.hostname "nona" }}
 monitor=eDP-1, 1920x1200@60.00, 0x0, 1
 {{- else }}
 monitor = , preferred, auto, 1
@@ -201,7 +201,7 @@ bindel = ,XF86AudioNext, exec, playerctl next
 bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
 bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
 
-{{- if ne .chezmoi.hostname "hermes" }}
+{{- if ne .chezmoi.hostname "nona" }}
 # Save recording
 bind = $mainMod, F10, exec, killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- "GPU Screen Recorder" "Replay saved"
 {{- end }}
