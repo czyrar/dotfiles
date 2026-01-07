@@ -68,6 +68,7 @@
           - mpv
           - eog
           - calibre
+          - firefox  # for videoconferences...
           ## Hyprland
           # - hyprland
           # - kitty
