@@ -9,8 +9,8 @@
 @define-color gray   #414868;
 
 * {
-  font-family: "Maple Mono NF CN";
-  font-size: 12px;
+  font-family: "IosevkaCustomNerdFont";
+  font-size: 13px;
 }
 
 window#waybar {

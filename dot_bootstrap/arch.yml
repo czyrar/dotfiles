@@ -69,25 +69,6 @@
           - eog
           - calibre
           - firefox  # for videoconferences...
-          ## Hyprland
-          # - hyprland
-          # - kitty
-          # - fuzzel
-          # - swww
-          # - xdg-desktop-portal-hyprland
-          # - xdg-desktop-portal-gtk
-          # - polkit-gnome
-          # - hypridle
-          # - hyprlock
-          # - hyprpicker
-          # - hyprshot
-          # - hyprland-qt-support
-          # - qt5-wayland
-          # - qt6-wayland
-          # - dunst
-          # - libadwaita
-          # - qt6ct
-          # - nwg-look
           ## Sway
           - sway
           - foot
@@ -107,6 +88,7 @@
           - libadwaita
           - qt6ct
           - nwg-look
+          - noto-fonts-emoji
           ## Waybar
           - waybar
           - bluetui
@@ -137,6 +119,7 @@
           - rustup
           - blas-openblas
           - make
+          - uv
           - docker
           - docker-compose
           ## Latex
@@ -166,6 +149,12 @@
           # ZSH
           - zsh
           - zoxide
+          # Winapps
+          - dialog
+          - freerdp
+          - iproute2
+          - libnotify
+          - openbsd-netcat
         state: present
 
     - name: Select rust toolchain
@@ -214,8 +203,8 @@
           - vesktop
           - wlogout
           - gpu-screen-recorder
-          - zapzap
           - gp-saml-gui-git
+          - elecwhat-bin
         state: present
 
     - name: Undo make `czyrar` be able to use sudo without password
@@ -243,17 +232,17 @@
         mode: "0755"
         owner: "{{ user }}"
 
-    - name: Check if Maple Mono exists
-      ansible.builtin.shell: "ls ~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
-      register: maple_mono_exists
-      ignore_errors: yes
-      changed_when: no
-
-    - name: Download Maple Mono
-      when: maple_mono_exists is failed
-      ansible.builtin.git:
-        repo: "https://github.com/czyrar/maple_mono.git"
-        dest: "~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
+    # - name: Check if Maple Mono exists
+    #   ansible.builtin.shell: "ls ~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
+    #   register: maple_mono_exists
+    #   ignore_errors: yes
+    #   changed_when: no
+    #
+    # - name: Download Maple Mono
+    #   when: maple_mono_exists is failed
+    #   ansible.builtin.git:
+    #     repo: "https://github.com/czyrar/maple_mono.git"
+    #     dest: "~{{ user }}/.local/share/fonts/MapleMono-NF-CN"
 
     - name: Check if there is neovim config
       ansible.builtin.shell: "ls ~{{ user }}/.config/nvim"

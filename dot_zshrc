@@ -31,6 +31,7 @@ alias .....='cd ../../../..'
 alias grep='grep --color=auto'
 alias bc='bc -l'
 alias mkdir='mkdir -pv'
+alias v=nvim
 alias vim=nvim
 alias l='eza --color always'
 alias ls='eza --color always -la'
@@ -39,6 +40,8 @@ alias lt='l -RTl'
 alias lp='eza -1'
 alias conda=micromamba
 alias vpn-uam='gp-saml-gui -S --allow-insecure-crypto vpn.uam.es'
+alias winapps-start='docker compose --file ~/.config/winapps/compose.yaml start'
+alias winapps-stop='docker compose --file ~/.config/winapps/compose.yaml stop'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

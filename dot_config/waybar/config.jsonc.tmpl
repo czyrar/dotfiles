@@ -138,7 +138,7 @@
         "on-click-right": "pgrep btop && killall btop || foot --app-id btop btop"
     },
     "memory":{
-        "format": "   {percentage}%",
+        "format": "  {percentage}%",
         "tooltip": false,
         "interval": 2,
         "on-click": "pgrep btop && killall btop || foot --app-id btop btop",
@@ -163,18 +163,18 @@
         "format-icons": {
             "phone": " ",
             "portable": " ",
-            "default": ["", " ", " "]
+            "default": [" ", " ", " "]
         },
         "on-click": "pgrep wiremix && killall wiremix || foot --app-id wiremix wiremix",
         "on-click-right": "pgrep wiremix && killall wiremix || foot --app-id wiremix wiremix",
         "on-click-middle": "wpctl set-mute @DEFAULT_SINK@ toggle"
     },
     "bluetooth": {
-        "format": " 󰂯 ",
-        "format-disabled": " 󰂲 ",
-        "format-off": " 󰂲 ",
-        "format-on": " 󰂯 ",
-        "format-connected": " 󰂱 ",
+        "format": "󰂯 ",
+        "format-disabled": "󰂲 ",
+        "format-off": "󰂲 ",
+        "format-on": "󰂯 ",
+        "format-connected": "󰂱 ",
         "format-connected-battery": "󰂱 {device_battery_percentage}%",
         "tooltip-format": "{controller_alias}\t{controller_address}",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
@@ -198,10 +198,10 @@
         "format": "{icon}",
         "tooltip-format": "Power profile: {profile}",
         "format-icons": {
-            "default": " 󰾅 ",
-            "performance": " 󰓅 ",
-            "balanced": " 󰾅 ",
-            "power-saver": " 󰾆 "
+            "default": "󰾅 ",
+            "performance": "󰓅 ",
+            "balanced": "󰾅 ",
+            "power-saver": "󰾆 "
         }
     },
     "tray": {
